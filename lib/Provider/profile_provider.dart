@@ -94,6 +94,9 @@ class ProfileProvider extends ChangeNotifier {
     }
   }
 
+  Future<DocumentSnapshot> getProfileInfoByUID(String uid) async {
+    return await FirebaseFirestore.instance.collection('users').doc(uid).get();
+  }
   refreshAssignBusPage() {
     refreshAssignBus = !refreshAssignBus;
     notifyListeners();

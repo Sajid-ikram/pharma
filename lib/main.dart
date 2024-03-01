@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:pharma/Provider/post_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'Provider/authentication.dart';
+import 'Provider/pharmacy_provider.dart';
 import 'Provider/profile_provider.dart';
 import 'Utils/app_colors.dart';
 import 'View/Auth/registration.dart';
 import 'View/Auth/signin.dart';
-import 'View/Profile/profile.dart';
+import 'View/profile/lodged_in_profile.dart';
+import 'View/profile/profile.dart';
 import 'initial.dart';
 
 void main()  {
@@ -41,6 +44,8 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (_) => Authentication()),
         ChangeNotifierProvider(create: (_) => ProfileProvider()),
+        ChangeNotifierProvider(create: (_) => PharmacyProvider()),
+        ChangeNotifierProvider(create: (_) => PostProvider()),
       ],
       child: ScreenUtilInit(
         designSize: const Size(360, 800),

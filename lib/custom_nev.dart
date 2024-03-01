@@ -7,7 +7,9 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'Utils/app_colors.dart';
 import 'View/Chat/chat.dart';
 import 'View/Home/home.dart';
-import 'View/Profile/profile.dart';
+import 'View/Notices/pharmacy.dart';
+import 'View/profile/lodged_in_profile.dart';
+import 'View/profile/profile.dart';
 
 class CustomNavigation extends StatefulWidget {
   const CustomNavigation({Key? key}) : super(key: key);
@@ -17,17 +19,19 @@ class CustomNavigation extends StatefulWidget {
 }
 
 class _CustomNavigationState extends State<CustomNavigation> {
-  int _bottomNavIndex = 1;
+  int _bottomNavIndex = 2;
 
   List<IconData> icons = [
     FontAwesomeIcons.house,
     FontAwesomeIcons.comments,
-    FontAwesomeIcons.user,
+    FontAwesomeIcons.houseMedical,
+    FontAwesomeIcons.gear,
   ];
 
   List<Widget> pages = [
     const Home(),
     const Chat(),
+    const Pharmacy(),
     const Profile(),
   ];
 
