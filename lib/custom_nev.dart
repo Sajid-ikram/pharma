@@ -7,8 +7,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'Utils/app_colors.dart';
 import 'View/Chat/chat.dart';
 import 'View/Home/home.dart';
-import 'View/Notices/pharmacy.dart';
-import 'View/profile/lodged_in_profile.dart';
+import 'View/Pharmacy/pharmacy.dart';
 import 'View/profile/profile.dart';
 
 class CustomNavigation extends StatefulWidget {

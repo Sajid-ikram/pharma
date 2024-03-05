@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
 
 class Authentication with ChangeNotifier {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
@@ -44,7 +46,7 @@ class Authentication with ChangeNotifier {
     required String password,
     required String department,
     required context,
-
+    bool isRegistration = true
   }) async {
     try {
       _firebaseAuth
@@ -55,7 +57,7 @@ class Authentication with ChangeNotifier {
           .then(
         (value) {
           Navigator.of(context, rootNavigator: true).pop();
-          Navigator.of(context).pushReplacementNamed("MiddleOfHomeAndSignIn");
+          if(isRegistration)Navigator.of(context).pushReplacementNamed("MiddleOfHomeAndSignIn");
           FirebaseFirestore.instance
               .collection("users")
               .doc(value.user!.uid)
@@ -93,6 +95,90 @@ class Authentication with ChangeNotifier {
       return "An Error occur";
     }
   }
+
+
+  Future<String> createUser({
+    required String name,
+    required String email,
+    required String password,
+    required String department,
+    required context,
+    bool isRegistration = true
+  }) async {
+    try {
+      var secondaryAppOptions =  const FirebaseOptions(
+        // Replace with your actual Firebase project configuration
+        apiKey: "AIzaSyAXuKthNAleNpyiIGEoOKyAKje9_2q1dS4",
+        appId: "1:924871265359:android:361c37964409bff1e2ae3a",
+        projectId: "pharma-d27ac",
+        messagingSenderId: "924871265359",
+      );
+
+      // Initialize the secondary Firebase app
+      await Firebase.initializeApp(options: secondaryAppOptions, name: 'secondary');
+
+      // Use the secondary app for user creation
+      final auth = FirebaseAuth.instanceFor(app: Firebase.app('secondary'));
+      UserCredential credential = await auth.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+      Navigator.of(context, rootNavigator: true).pop();
+      if (credential.user != null) {
+        await credential.user!.sendEmailVerification();
+        FirebaseFirestore.instance
+            .collection("users")
+            .doc(credential.user!.uid)
+            .set(
+          {
+            "name": name,
+            "email": credential.user!.email,
+            "url": "",
+            "role": "",
+            "department": department,
+
+          },
+        );
+      }
+
+      // Delete the secondary app (consider keeping it if needed)
+      await Firebase.app('secondary').delete();
+      return "Success";
+    } on FirebaseAuthException catch (e) {
+      Navigator.of(context, rootNavigator: true).pop();
+      switch (e.code) {
+        case "weak-password":
+          return "Your password is too weak";
+
+        case "invalid-email":
+          return "Your email is invalid";
+
+        case "email-already-in-use":
+          return "Email is already in use on different account";
+
+        default:
+          return "An undefined Error happened.";
+      }
+    } catch (e) {
+
+      return "An Error occur";
+    }
+  }
+
+/*  Future<bool> createUser(String email, String password) async {
+    try {
+      // Create Firebase app options for the secondary app
+
+
+      // Handle success (optional: send verification email)
+
+    }  catch (e) {
+      // Handle errors
+      print(e);
+      print("88888888888888888888888888888888888");
+      return false;
+    }
+  }*/
 
   Future signOut() async {
     await _firebaseAuth.signOut();

@@ -6,13 +6,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:pharma/View/Notices/user_info.dart';
+import 'package:pharma/View/Pharmacy/user_info.dart';
 import 'package:provider/provider.dart';
 
 import '../../Provider/pharmacy_provider.dart';
 import '../../Provider/profile_provider.dart';
 import '../../Utils/custom_loading.dart';
 import 'add_new_post_page.dart';
+import 'add_pharmacists.dart';
 
 enum options { delete, edit, addPharmacists }
 
@@ -116,15 +117,13 @@ class _PharmacyState extends State<Pharmacy> {
                                               ),
                                             ),
                                           );
-                                        }else if (result == options.addPharmacists) {
+                                        } else if (result ==
+                                            options.addPharmacists) {
                                           Navigator.push(
                                             context,
                                             MaterialPageRoute(
                                               builder: (context) =>
-                                                  AddNewPostPage(
-                                                    documentSnapshot:
-                                                    data?.docs[index],
-                                                  ),
+                                                  const AddPharmacists(),
                                             ),
                                           );
                                         }

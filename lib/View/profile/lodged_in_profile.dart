@@ -8,7 +8,7 @@ import 'package:pharma/View/profile/sub_page/edit_profile.dart';
 import 'package:provider/provider.dart';
 import '../../Provider/authentication.dart';
 import '../../Provider/profile_provider.dart';
-import '../Notices/add_new_post_page.dart';
+import '../Pharmacy/add_new_post_page.dart';
 
 class LodgedInProfile extends StatelessWidget {
   const LodgedInProfile({Key? key}) : super(key: key);

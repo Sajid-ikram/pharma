@@ -32,7 +32,7 @@ Center customTextField(TextEditingController controller, String text,
             snackBar(context, "Name should contain only character");
             return "Name should contain only character";
           }
-        } else if (text == "Valid email" || text == "Enter your email") {
+        } /*else if (text == "Valid email" || text == "Enter your email") {
           if (value != null && !value.contains("@lus.ac.bd")) {
             snackBar(context, "You have to use LU G Suite Email");
             return "You have to use LU G Suite Email";
@@ -40,7 +40,7 @@ Center customTextField(TextEditingController controller, String text,
             snackBar(context, "Field can not be empty!");
             return "Field can not be empty!";
           }
-        } else if (text == "Password") {
+        }*/ else if (text == "Password") {
           if (value != null && value.length < 6) {
             snackBar(context, "Password should be at least 6 character long");
             return "Password should be at least 6 character long";

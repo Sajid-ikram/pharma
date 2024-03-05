@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'lodged_in_profile.dart';
-import 'loged_out_profile.dart';
+import 'lodged_out_profile.dart';
 
 class Profile extends StatefulWidget {
   const Profile({super.key});
