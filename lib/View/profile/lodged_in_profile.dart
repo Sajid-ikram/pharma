@@ -46,18 +46,14 @@ Widget topWidget(Size size, ProfileProvider pro, BuildContext context) {
   final List<String> listName = [
     "Edit Profile",
     "Create Pharmacy",
-    "Privacy Policy",
     "Admin Panel",
-    "Send Location",
     "LogOut",
   ];
 
   final List<IconData> listIcons = [
     Icons.person_outline,
     Icons.local_pharmacy_rounded,
-    Icons.privacy_tip,
     Icons.security,
-    Icons.location_on_rounded,
     Icons.login_outlined,
   ];
 
@@ -101,37 +97,27 @@ Widget topWidget(Size size, ProfileProvider pro, BuildContext context) {
                             builder: (context) => const EditProfile()));
                       } else if (index == 1) {
                         Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) =>  AddNewPostPage()));
-                      } else if (index == 2) {
-                      } else if (index == 3) {
+                            builder: (context) => AddNewPostPage()));
+                      }else if (index == 2) {
                         //Navigator.of(context).pushNamed("GPSSetting");
                         Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => const AdminPanel()));
-                      } else if (index == 4) {
-                        Navigator.of(context).pushNamed("GPSSetting");
-                      } else if (index == 5) {
+                            builder: (context) => AdminPanel()));
+                      }  else if (index == 3) {
                         Provider.of<Authentication>(context, listen: false)
                             .signOut();
                       }
                     },
-                    child: pro.role == "admin"
+                    child: pro.role == "admin" || pro.role == "contractor"
                         ? profileList(
                             listName[index],
                             listIcons[index],
                           )
-                        : pro.role == "driver"
-                            ? index == 3
-                                ? const SizedBox()
-                                : profileList(
-                                    listName[index],
-                                    listIcons[index],
-                                  )
-                            : index == 3 || index == 4
-                                ? const SizedBox()
-                                : profileList(
-                                    listName[index],
-                                    listIcons[index],
-                                  ),
+                        : index == 1 || index == 2
+                            ? const SizedBox()
+                            : profileList(
+                                listName[index],
+                                listIcons[index],
+                              ),
                   );
                 },
                 itemCount: listIcons.length,

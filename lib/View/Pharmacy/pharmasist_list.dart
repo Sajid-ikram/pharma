@@ -2,42 +2,24 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:provider/provider.dart';
-
+import 'package:pharma/View/Pharmacy/single_pharmasist.dart';
 import '../../../Utils/app_colors.dart';
-import 'user_list.dart';
 
-class AdminPanel extends StatefulWidget {
-  AdminPanel({Key? key, this.isAdminPanel}) : super(key: key);
-  bool? isAdminPanel;
+class PharmasistList extends StatefulWidget {
+  PharmasistList({Key? key, required this.pharmacyId,required this.creatorId}) : super(key: key);
+
+  String pharmacyId;
+  String creatorId;
 
   @override
-  _AdminPanelState createState() => _AdminPanelState();
+  _PharmasistListState createState() => _PharmasistListState();
 }
 
-class _AdminPanelState extends State<AdminPanel> {
+class _PharmasistListState extends State<PharmasistList> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: widget.isAdminPanel != null
-          ? null
-          : AppBar(
-              title: const Text("Admin Panel",
-                  style: TextStyle(color: Colors.black)),
-              centerTitle: true,
-              backgroundColor: Colors.white,
-              elevation: 0,
-              iconTheme: const IconThemeData(color: Colors.black),
-              leading: IconButton(
-                splashColor: Colors.transparent,
-                highlightColor: Colors.transparent,
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                padding: EdgeInsets.only(left: 10.w),
-                icon: const Icon(Icons.arrow_back),
-              ),
-            ),
+
       body: Container(
         padding: EdgeInsets.symmetric(horizontal: 25.w),
         width: 414,
@@ -60,7 +42,7 @@ class _AdminPanelState extends State<AdminPanel> {
                   width: 130.w,
                   child: Center(
                     child: Text(
-                      "Role",
+                      "Action",
                       style: GoogleFonts.inter(
                         fontSize: 17.sp,
                         color: primaryColor,
@@ -77,7 +59,7 @@ class _AdminPanelState extends State<AdminPanel> {
               height: 0,
             ),
             SizedBox(height: 12.h),
-            const Expanded(child: UserList())
+              Expanded(child: SinglePharmasist(pharmacyId: widget.pharmacyId,creatorId: widget.creatorId,))
           ],
         ),
       ),

@@ -19,7 +19,6 @@ class Authentication with ChangeNotifier {
 
       return "Success";
     } on FirebaseAuthException catch (e) {
-
       switch (e.code) {
         case "invalid-email":
           return "Your email address appears to be malformed.";
@@ -40,14 +39,13 @@ class Authentication with ChangeNotifier {
     }
   }
 
-  Future<String> signUp({
-    required String name,
-    required String email,
-    required String password,
-    required String department,
-    required context,
-    bool isRegistration = true
-  }) async {
+  Future<String> signUp(
+      {required String name,
+      required String email,
+      required String password,
+      required String fCode,
+      required context,
+      bool isRegistration = true}) async {
     try {
       _firebaseAuth
           .createUserWithEmailAndPassword(
@@ -57,7 +55,8 @@ class Authentication with ChangeNotifier {
           .then(
         (value) {
           Navigator.of(context, rootNavigator: true).pop();
-          if(isRegistration)Navigator.of(context).pushReplacementNamed("MiddleOfHomeAndSignIn");
+          if (isRegistration)
+            Navigator.of(context).pushReplacementNamed("MiddleOfHomeAndSignIn");
           FirebaseFirestore.instance
               .collection("users")
               .doc(value.user!.uid)
@@ -66,8 +65,7 @@ class Authentication with ChangeNotifier {
               "name": name,
               "email": value.user!.email,
               "url": "",
-              "role": "",
-              "department": department,
+              "role": fCode.isEmpty ? "" : "contractor",
 
             },
           );
@@ -91,22 +89,20 @@ class Authentication with ChangeNotifier {
           return "An undefined Error happened.";
       }
     } catch (e) {
-
       return "An Error occur";
     }
   }
 
-
-  Future<String> createUser({
-    required String name,
-    required String email,
-    required String password,
-    required String department,
-    required context,
-    bool isRegistration = true
-  }) async {
+  Future<String> createUser(
+      {required String name,
+      required String email,
+      required String password,
+      required String department,
+      required String pharmacyId,
+      required context,
+      bool isRegistration = true}) async {
     try {
-      var secondaryAppOptions =  const FirebaseOptions(
+      var secondaryAppOptions = const FirebaseOptions(
         // Replace with your actual Firebase project configuration
         apiKey: "AIzaSyAXuKthNAleNpyiIGEoOKyAKje9_2q1dS4",
         appId: "1:924871265359:android:361c37964409bff1e2ae3a",
@@ -115,7 +111,8 @@ class Authentication with ChangeNotifier {
       );
 
       // Initialize the secondary Firebase app
-      await Firebase.initializeApp(options: secondaryAppOptions, name: 'secondary');
+      await Firebase.initializeApp(
+          options: secondaryAppOptions, name: 'secondary');
 
       // Use the secondary app for user creation
       final auth = FirebaseAuth.instanceFor(app: Firebase.app('secondary'));
@@ -135,10 +132,13 @@ class Authentication with ChangeNotifier {
             "email": credential.user!.email,
             "url": "",
             "role": "",
-            "department": department,
-
           },
         );
+        FirebaseFirestore.instance
+            .collection("pharmacy")
+            .doc(pharmacyId)
+            .collection("pharmacies")
+            .add({"pharmaciesId": credential.user!.uid});
       }
 
       // Delete the secondary app (consider keeping it if needed)
@@ -160,7 +160,6 @@ class Authentication with ChangeNotifier {
           return "An undefined Error happened.";
       }
     } catch (e) {
-
       return "An Error occur";
     }
   }
@@ -191,7 +190,6 @@ class Authentication with ChangeNotifier {
 
       return "Success";
     } catch (e) {
-
       return "Error";
     }
   }

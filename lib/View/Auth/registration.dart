@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:pharma/Utils/fcode.dart';
 import 'package:pharma/View/Auth/widgets/page_indicator.dart';
 import 'package:pharma/View/Auth/widgets/round_button.dart';
 import 'package:pharma/View/Auth/widgets/snackBar.dart';
@@ -23,7 +24,7 @@ class _RegistrationState extends State<Registration> {
   TextEditingController nameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
-  TextEditingController departmentController = TextEditingController();
+  TextEditingController fcodeController = TextEditingController();
 
   final _formKey = GlobalKey<FormState>();
 
@@ -32,11 +33,17 @@ class _RegistrationState extends State<Registration> {
     nameController.clear();
     emailController.clear();
     passwordController.clear();
-    departmentController.clear();
+    fcodeController.clear();
     super.dispose();
   }
 
   validate() async {
+    if (fcodeController.text.isNotEmpty) {
+      if (!fcodeList.contains(fcodeController.text)) {
+        snackBar(context, "Code does not match");
+        return;
+      }
+    }
     if (_formKey.currentState!.validate()) {
       try {
         buildLoadingIndicator(context);
@@ -45,7 +52,7 @@ class _RegistrationState extends State<Registration> {
           name: nameController.text,
           email: emailController.text,
           password: passwordController.text,
-          department: departmentController.text,
+          fCode: fcodeController.text.isEmpty ? "" : fcodeController.text,
           context: context,
         )
             .then((value) async {
@@ -98,16 +105,15 @@ class _RegistrationState extends State<Registration> {
                     Row(
                       children: [
                         Text(
-                          "Write ID if you are a Contractor",
+                          "Write code if you are a Contractor",
                           style: TextStyle(
                               fontSize: 13.sp,
-                              color: Theme.of(context).primaryColor
-                          ),
+                              color: Theme.of(context).primaryColor),
                         ),
                       ],
                     ),
                     SizedBox(height: 20.h),
-                    customTextField(departmentController, "Contractor ID", context,
+                    customTextField(fcodeController, "Contractor ID", context,
                         Icons.password_outlined),
                   ],
                 ),

@@ -29,7 +29,7 @@ class _AddNewPostPageState extends State<AddNewPostPage> {
       String url = "";
 
 
-      Provider.of<PharmacyProvider>(context, listen: false).addNewNotice(
+      Provider.of<PharmacyProvider>(context, listen: false).addNewPharmacy(
         pharmacyName: pharmacyNameController.text,
         address: addressController.text,
         description: descriptionController.text,
@@ -55,7 +55,7 @@ class _AddNewPostPageState extends State<AddNewPostPage> {
         url = widget.documentSnapshot!["imageUrl"];
       }
 
-      Provider.of<PharmacyProvider>(context, listen: false).updateNotice(
+      Provider.of<PharmacyProvider>(context, listen: false).updatePharmacy(
         pharmacyName: pharmacyNameController.text,
         address: addressController.text,
         description: descriptionController.text,

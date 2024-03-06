@@ -48,7 +48,7 @@ Center customTextField(TextEditingController controller, String text,
             snackBar(context, "Field can not be empty!");
             return "Field can not be empty!";
           }
-        } else if (text == "Department") {
+        } /*else if (text == "Department") {
           if (value != null && value.length > 20) {
             snackBar(context, "Please enter short form of your department");
             return "Please enter short form of your department";
@@ -56,10 +56,10 @@ Center customTextField(TextEditingController controller, String text,
             snackBar(context, "Field can not be empty!");
             return "Field can not be empty!";
           }
-        } else if (value == null || value.isEmpty) {
+        }*/ /*else if (value == null || value.isEmpty) {
           snackBar(context, "Field can not be empty!");
           return "Field can not be empty!";
-        }
+        }*/
         return null;
       },
       obscureText: text == "Password" ? true : false,

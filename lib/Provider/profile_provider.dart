@@ -14,7 +14,6 @@ class ProfileProvider extends ChangeNotifier {
   String profileName = '';
   String role = '';
   String email = '';
-  String department = '';
   String currentUserUid = '';
 
   bool refreshAssignBus = false;
@@ -30,7 +29,6 @@ class ProfileProvider extends ChangeNotifier {
       profileName = userInfo["name"];
       role = userInfo["role"];
       email = userInfo["email"];
-      department = userInfo["department"];
       currentUserUid = user.uid;
       notifyListeners();
     }
@@ -38,18 +36,17 @@ class ProfileProvider extends ChangeNotifier {
 
   Future updateProfileInfo({
     required String name,
-    required String department,
     required BuildContext context,
   }) async {
     try {
       FirebaseFirestore.instance.collection("users").doc(currentUserUid).update(
         {
           "name": name,
-          "department": department,
+
         },
       );
       profileName = name;
-      this.department = department;
+
 
       notifyListeners();
     } catch (e) {

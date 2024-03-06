@@ -19,7 +19,6 @@ class EditProfile extends StatefulWidget {
 
 class _EditProfileState extends State<EditProfile> {
   late TextEditingController changeNameController;
-  late TextEditingController changeDepartmentController;
 
   final _formKey = GlobalKey<FormState>();
 
@@ -27,7 +26,6 @@ class _EditProfileState extends State<EditProfile> {
   void initState() {
     var pro = Provider.of<ProfileProvider>(context, listen: false);
     changeNameController = TextEditingController(text: pro.profileName);
-    changeDepartmentController = TextEditingController(text: pro.department);
 
     super.initState();
   }
@@ -39,7 +37,6 @@ class _EditProfileState extends State<EditProfile> {
         Provider.of<ProfileProvider>(context, listen: false)
             .updateProfileInfo(
           name: changeNameController.text,
-          department: changeDepartmentController.text,
           context: context,
         )
             .then(
@@ -98,9 +95,7 @@ class _EditProfileState extends State<EditProfile> {
                   children: [
                     customTextField(changeNameController, "Full name", context,
                         Icons.person_outline_rounded),
-                    SizedBox(height: 15.h),
-                    customTextField(changeDepartmentController, "Department",
-                        context, Icons.laptop),
+
 
                     /*if (role == "Student" || role == "Moderator")
                       _buildContainer(

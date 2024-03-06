@@ -7,7 +7,6 @@ import 'package:provider/provider.dart';
 import '../../../Provider/profile_provider.dart';
 import '../../../Utils/custom_loading.dart';
 
-
 enum SampleItem { admin, driver, user }
 
 class UserList extends StatefulWidget {
@@ -81,76 +80,12 @@ class _UserListState extends State<UserList> {
                             return changeRole(data?.docs[index]["role"], index);
                           },
                         ),
-                        pro.role == "admin"
-                            ? PopupMenuButton<SampleItem>(
-                                padding: EdgeInsets.zero,
-                                icon: Icon(
-                                  Icons.edit,
-                                  size: 15.sp,
-                                  color: Colors.red,
-                                ),
-                                onSelected: (SampleItem item) async {
-                                  if (item == SampleItem.admin) {
-                                    buildLoadingIndicator(context);
-                                    pro.changeRole(
-                                        role: "admin",
-                                        uid: data!.docs[index].id,
-                                        context: context);
-                                    Navigator.of(context, rootNavigator: true)
-                                        .pop();
-                                  } else if (item == SampleItem.driver) {
-                                    buildLoadingIndicator(context);
-                                    pro.changeRole(
-                                        role: "driver",
-                                        uid: data!.docs[index].id,
-                                        context: context);
-                                    Navigator.of(context, rootNavigator: true)
-                                        .pop();
-                                  } else {
-                                    buildLoadingIndicator(context);
-                                    pro.changeRole(
-                                        role: "user",
-                                        uid: data!.docs[index].id,
-                                        context: context);
-                                    Navigator.of(context, rootNavigator: true)
-                                        .pop();
-                                  }
-                                },
-                                itemBuilder: (BuildContext context) =>
-                                    <PopupMenuEntry<SampleItem>>[
-                                  if (data?.docs[index]["role"] == "admin")
-                                    const PopupMenuItem<SampleItem>(
-                                      value: SampleItem.user,
-                                      child: Text('Remove Admin'),
-                                    ),
-                                  if (data?.docs[index]["role"] == "admin")
-                                    const PopupMenuItem<SampleItem>(
-                                      value: SampleItem.driver,
-                                      child: Text('Make Driver'),
-                                    ),
-                                  if (data?.docs[index]["role"] == "driver")
-                                    const PopupMenuItem<SampleItem>(
-                                      value: SampleItem.admin,
-                                      child: Text('Make Admin'),
-                                    ),
-                                  if (data?.docs[index]["role"] == "driver")
-                                    const PopupMenuItem<SampleItem>(
-                                      value: SampleItem.user,
-                                      child: Text('Remove Driver'),
-                                    ),
-                                  if (data?.docs[index]["role"] != "driver" &&
-                                      data?.docs[index]["role"] != "admin")
-                                    const PopupMenuItem<SampleItem>(
-                                      value: SampleItem.admin,
-                                      child: Text('Make Admin'),
-                                    ),
-                                  if (data?.docs[index]["role"] != "driver" &&
-                                      data?.docs[index]["role"] != "admin")
-                                    const PopupMenuItem<SampleItem>(
-                                      value: SampleItem.driver,
-                                      child: Text('Make Driver'),
-                                    ),
-                                ],
+                        SizedBox(width: 10.w),
+                        pro.role == "admin" || pro.role == "contractor"
+                            ?  Icon(
+                                Icons.edit,
+                                size: 15.sp,
+                                color: Colors.red,
                               )
                             : SizedBox(width: 40.w),
                       ],
@@ -175,8 +110,8 @@ class _UserListState extends State<UserList> {
       child: Text(
         role == "admin"
             ? "Admin"
-            : role == "driver"
-                ? "Driver"
+            : role == "contractor"
+                ? "Contractor"
                 : "User",
         style: TextStyle(
           fontSize: 15.sp,

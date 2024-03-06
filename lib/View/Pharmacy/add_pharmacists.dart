@@ -14,8 +14,9 @@ import '../../Utils/custom_loading.dart';
 import 'add_new_post_page.dart';
 
 class AddPharmacists extends StatefulWidget {
-  const AddPharmacists({Key? key}) : super(key: key);
+   AddPharmacists({Key? key, required this.pharmacyId}) : super(key: key);
 
+  String pharmacyId;
   @override
   State<AddPharmacists> createState() => _AddPharmacistsState();
 }
@@ -47,6 +48,7 @@ class _AddPharmacistsState extends State<AddPharmacists> {
           department: "change it",
           context: context,
           isRegistration: false,
+          pharmacyId: widget.pharmacyId
         )
             .then((value) async {
           if (value != "Success") {

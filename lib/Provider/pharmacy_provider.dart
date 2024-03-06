@@ -5,7 +5,7 @@ import 'package:flutter/cupertino.dart';
 import '../Utils/error_dialoge.dart';
 
 class PharmacyProvider with ChangeNotifier {
-  Future addNewNotice({
+  Future addNewPharmacy({
     required String pharmacyName,
     required String address,
     required String description,
@@ -13,7 +13,7 @@ class PharmacyProvider with ChangeNotifier {
     required BuildContext context,
   }) async {
     try {
-      FirebaseFirestore.instance.collection("notice").doc().set(
+      FirebaseFirestore.instance.collection("pharmacy").doc().set(
         {
           "pharmacyName": pharmacyName,
           "address": address,
@@ -71,7 +71,7 @@ class PharmacyProvider with ChangeNotifier {
     }
   }
 
-  Future updateNotice({
+  Future updatePharmacy({
     required String pharmacyName,
     required String address,
     required String description,
@@ -79,7 +79,7 @@ class PharmacyProvider with ChangeNotifier {
     required BuildContext context,
   }) async {
     try {
-      FirebaseFirestore.instance.collection("notice").doc(id).update(
+      FirebaseFirestore.instance.collection("pharmacy").doc(id).update(
         {
           "pharmacyName": pharmacyName,
           "address": address,
@@ -145,8 +145,18 @@ class PharmacyProvider with ChangeNotifier {
     }
   }
 
-  Future deleteNotice(String id) async {
-    await FirebaseFirestore.instance.collection("notice").doc(id).delete();
+  Future deletePharmacy(String id) async {
+    await FirebaseFirestore.instance.collection("pharmacy").doc(id).delete();
+    notifyListeners();
+  }
+  Future deletePharmacists(String docId, String pharmacyId) async {
+    print(docId);
+    print("------------------------1");
+    await FirebaseFirestore.instance
+        .collection("pharmacy")
+        .doc(pharmacyId)
+        .collection("pharmacies").doc(docId).delete();
+    print("------------------------2");
     notifyListeners();
   }
 
