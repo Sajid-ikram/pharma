@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 
 import '../../../Provider/profile_provider.dart';
 import '../../../Utils/custom_loading.dart';
+import 'edit_profile.dart';
 
 enum SampleItem { admin, driver, user }
 
@@ -82,10 +83,17 @@ class _UserListState extends State<UserList> {
                         ),
                         SizedBox(width: 10.w),
                         pro.role == "admin" || pro.role == "contractor"
-                            ?  Icon(
-                                Icons.edit,
-                                size: 15.sp,
-                                color: Colors.red,
+                            ? InkWell(
+                                onTap: () {
+                                  Navigator.of(context).push(MaterialPageRoute(
+                                      builder: (context) =>
+                                           EditProfile(id: data!.docs[index].id,)));
+                                },
+                                child: Icon(
+                                  Icons.edit,
+                                  size: 15.sp,
+                                  color: Colors.red,
+                                ),
                               )
                             : SizedBox(width: 40.w),
                       ],

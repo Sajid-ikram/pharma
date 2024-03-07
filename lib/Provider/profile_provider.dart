@@ -36,17 +36,19 @@ class ProfileProvider extends ChangeNotifier {
 
   Future updateProfileInfo({
     required String name,
+    String? id,
     required BuildContext context,
   }) async {
     try {
-      FirebaseFirestore.instance.collection("users").doc(currentUserUid).update(
+      FirebaseFirestore.instance
+          .collection("users")
+          .doc(id ?? currentUserUid)
+          .update(
         {
           "name": name,
-
         },
       );
-      profileName = name;
-
+      if (id == null) profileName = name;
 
       notifyListeners();
     } catch (e) {
@@ -94,6 +96,7 @@ class ProfileProvider extends ChangeNotifier {
   Future<DocumentSnapshot> getProfileInfoByUID(String uid) async {
     return await FirebaseFirestore.instance.collection('users').doc(uid).get();
   }
+
   refreshAssignBusPage() {
     refreshAssignBus = !refreshAssignBus;
     notifyListeners();

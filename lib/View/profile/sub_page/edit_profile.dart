@@ -1,17 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-
 import '../../../Provider/profile_provider.dart';
 import '../../../Utils/custom_button.dart';
 import '../../../Utils/custom_loading.dart';
 import '../../../Utils/error_dialoge.dart';
 import '../../auth/widgets/text_field.dart';
+import 'dart:io';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 
 class EditProfile extends StatefulWidget {
-  const EditProfile({Key? key}) : super(key: key);
+  EditProfile({Key? key, this.id}) : super(key: key);
+  String? id;
 
   @override
   State<EditProfile> createState() => _EditProfileState();
@@ -25,9 +28,25 @@ class _EditProfileState extends State<EditProfile> {
   @override
   void initState() {
     var pro = Provider.of<ProfileProvider>(context, listen: false);
-    changeNameController = TextEditingController(text: pro.profileName);
+    if (widget.id != null) {
+      getData();
+      changeNameController = TextEditingController(text: "");
+    } else {
+      changeNameController = TextEditingController(text: pro.profileName);
+    }
 
     super.initState();
+  }
+
+  getData() async {
+    DocumentSnapshot userInfo = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(widget.id)
+        .get();
+
+    changeNameController = TextEditingController(text: userInfo["name"]);
+
+    setState(() {});
   }
 
   validate() async {
@@ -37,6 +56,7 @@ class _EditProfileState extends State<EditProfile> {
         Provider.of<ProfileProvider>(context, listen: false)
             .updateProfileInfo(
           name: changeNameController.text,
+          id: widget.id,
           context: context,
         )
             .then(
@@ -46,9 +66,10 @@ class _EditProfileState extends State<EditProfile> {
               const SnackBar(
                 content: Text(
                   "Profile updated successfully",
-                  style: TextStyle(color: Colors.white, ),
+                  style: TextStyle(
+                    color: Colors.white,
+                  ),
                 ),
-
               ),
             );
           },
@@ -95,7 +116,6 @@ class _EditProfileState extends State<EditProfile> {
                   children: [
                     customTextField(changeNameController, "Full name", context,
                         Icons.person_outline_rounded),
-
 
                     /*if (role == "Student" || role == "Moderator")
                       _buildContainer(

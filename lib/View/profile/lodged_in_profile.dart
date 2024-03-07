@@ -94,7 +94,7 @@ Widget topWidget(Size size, ProfileProvider pro, BuildContext context) {
                     onTap: () {
                       if (index == 0) {
                         Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => const EditProfile()));
+                            builder: (context) =>  EditProfile()));
                       } else if (index == 1) {
                         Navigator.of(context).push(MaterialPageRoute(
                             builder: (context) => AddNewPostPage()));
