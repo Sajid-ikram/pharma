@@ -5,7 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'Utils/app_colors.dart';
-import 'View/Chat/chat.dart';
+import 'View/Chat/chat_page.dart';
 import 'View/Home/home.dart';
 import 'View/Pharmacy/pharmacy.dart';
 import 'View/profile/profile.dart';

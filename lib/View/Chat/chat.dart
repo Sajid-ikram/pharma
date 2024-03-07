@@ -1,38 +1,108 @@
-import 'package:flutter/cupertino.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:pharma/View/Chat/lodged_in_chat.dart';
-import 'package:pharma/View/Chat/lodged_out_chat.dart';
-import '../Auth/widgets/round_button.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:pharma/Utils/app_colors.dart';
+import 'package:pharma/View/Chat/widgets/build_all_chats.dart';
+import 'package:pharma/View/Chat/widgets/build_chat_top.dart';
+import 'package:provider/provider.dart';
+
+import '../../Provider/chat_provider.dart';
+import '../../Provider/profile_provider.dart';
 
 class Chat extends StatefulWidget {
-  const Chat({super.key});
+  const Chat(
+      {Key? key, required this.name, required this.url, required this.uid})
+      : super(key: key);
+
+  final String name;
+  final String url;
+  final String uid;
 
   @override
   State<Chat> createState() => _ChatState();
 }
 
 class _ChatState extends State<Chat> {
-  bool isLodgedIn = false;
+  final TextEditingController _controller = TextEditingController();
 
   @override
   void initState() {
-    final User? user = FirebaseAuth.instance.currentUser;
-    if (user != null) {
-      isLodgedIn = true;
-      setState(() {});
-    }
+    var pro = Provider.of<ChatProvider>(context, listen: false);
+    var pro2 = Provider.of<ProfileProvider>(context, listen: false);
+    pro.createChatRoom(pro2.currentUserUid, widget.uid, pro2.profileUrl,
+        widget.url, pro2.profileName, widget.name);
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    var pro = Provider.of<ProfileProvider>(context, listen: false);
     return Scaffold(
-      body:  isLodgedIn ? const LodgedInChat() : const LodgedOutChat(),
+      body: Column(
+        children: [
+          SizedBox(height: 60.h),
+          buildChatTop(context, widget.name, widget.url),
+          buildAllChats(pro, widget.uid),
+          Consumer<ChatProvider>(
+            builder: (context, provider, child) {
+              return Container(
+                margin: EdgeInsets.fromLTRB(30.w, 20.h, 30.w, 20.h),
+                height: 60.h,
+                width: double.infinity,
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    boxShadow: [
+                      BoxShadow(
+                        blurRadius: 10,
+                        color: Colors.grey.withOpacity(0.15),
+                        spreadRadius: 10,
+                      )
+                    ],
+                    borderRadius: BorderRadius.circular(10.sp),
+                  ),
+                  height: 53.w,
+                  width: 280.w,
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: TextFormField(
+                          style: GoogleFonts.inter(color: Colors.black),
+                          controller: _controller,
+                          decoration: const InputDecoration(
+                              border: InputBorder.none,
+                              contentPadding:
+                                  EdgeInsets.symmetric(horizontal: 10)),
+                        ),
+                      ),
+                      IconButton(
+                        onPressed: () {
+                          if (_controller.text.isNotEmpty) {
+                            provider.addMessage(
+                              message: _controller.text,
+                              myUid: pro.currentUserUid,
+                              receiverUid: widget.uid,
+                            );
+                            _controller.clear();
+                          }
+                        },
+                        splashColor: Colors.transparent,
+                        highlightColor: Colors.transparent,
+                        icon: const Icon(
+                          FontAwesomeIcons.paperPlane,
+                          color: primaryColor,
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+              );
+            },
+          )
+        ],
+      ),
     );
   }
-
-
 }

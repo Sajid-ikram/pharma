@@ -2,8 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:provider/provider.dart';
-
 import '../../../Utils/app_colors.dart';
 import 'user_list.dart';
 
@@ -19,10 +17,8 @@ class _AdminPanelState extends State<AdminPanel> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: widget.isAdminPanel != null
-          ? null
-          : AppBar(
-              title: const Text("Admin Panel",
+      appBar:  AppBar(
+              title:  Text(widget.isAdminPanel != null? "Users" : "Admin Panel",
                   style: TextStyle(color: Colors.black)),
               centerTitle: true,
               backgroundColor: Colors.white,
@@ -77,7 +73,7 @@ class _AdminPanelState extends State<AdminPanel> {
               height: 0,
             ),
             SizedBox(height: 12.h),
-            const Expanded(child: UserList())
+             Expanded(child: UserList(isAdminPanel: widget.isAdminPanel,))
           ],
         ),
       ),

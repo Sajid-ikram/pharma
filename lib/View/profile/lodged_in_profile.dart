@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:pharma/View/Auth/signin.dart';
 import 'package:pharma/View/profile/profile_widget/profile_image.dart';
 import 'package:pharma/View/profile/profile_widget/profile_list.dart';
 import 'package:pharma/View/profile/sub_page/admin_panel.dart';
@@ -105,6 +106,8 @@ Widget topWidget(Size size, ProfileProvider pro, BuildContext context) {
                       }  else if (index == 3) {
                         Provider.of<Authentication>(context, listen: false)
                             .signOut();
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => SignIn()));
                       }
                     },
                     child: pro.role == "admin" || pro.role == "contractor"

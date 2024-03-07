@@ -6,12 +6,14 @@ import 'package:provider/provider.dart';
 
 import '../../../Provider/profile_provider.dart';
 import '../../../Utils/custom_loading.dart';
+import '../../Chat/chat.dart';
 import 'edit_profile.dart';
 
 enum SampleItem { admin, driver, user }
 
 class UserList extends StatefulWidget {
-  const UserList({Key? key}) : super(key: key);
+  UserList({Key? key, this.isAdminPanel}) : super(key: key);
+  bool? isAdminPanel;
 
   @override
   State<UserList> createState() => _UserListState();
@@ -44,7 +46,18 @@ class _UserListState extends State<UserList> {
             return Column(
               children: [
                 GestureDetector(
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => Chat(
+                          name: data?.docs[index]["name"],
+                          url: data?.docs[index]["url"],
+                          uid: data!.docs[index].id,
+                        ),
+                      ),
+                    );
+                  },
                   child: Container(
                     height: 30,
                     width: 350,
@@ -83,18 +96,22 @@ class _UserListState extends State<UserList> {
                         ),
                         SizedBox(width: 10.w),
                         pro.role == "admin" || pro.role == "contractor"
-                            ? InkWell(
-                                onTap: () {
-                                  Navigator.of(context).push(MaterialPageRoute(
-                                      builder: (context) =>
-                                           EditProfile(id: data!.docs[index].id,)));
-                                },
-                                child: Icon(
-                                  Icons.edit,
-                                  size: 15.sp,
-                                  color: Colors.red,
-                                ),
-                              )
+                            ? widget.isAdminPanel != null
+                                ? const SizedBox()
+                                : InkWell(
+                                    onTap: () {
+                                      Navigator.of(context)
+                                          .push(MaterialPageRoute(
+                                              builder: (context) => EditProfile(
+                                                    id: data!.docs[index].id,
+                                                  )));
+                                    },
+                                    child: Icon(
+                                      Icons.edit,
+                                      size: 15.sp,
+                                      color: Colors.red,
+                                    ),
+                                  )
                             : SizedBox(width: 40.w),
                       ],
                     ),
