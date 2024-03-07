@@ -55,6 +55,7 @@ class _UserInfoOfAPostState extends State<UserInfoOfAPost> {
 
   @override
   Widget build(BuildContext context) {
+    var pro = Provider.of<ProfileProvider>(context, listen: false);
     return isLoading
         ? Shimmer.fromColors(
             baseColor: Colors.grey,
@@ -80,13 +81,19 @@ class _UserInfoOfAPostState extends State<UserInfoOfAPost> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  buildNameText(14),
+                  pro.profileName.isEmpty ? SizedBox():buildNameText(14),
                   SizedBox(height: 2.h),
-                  Text(
-                    "Address: ${widget.address}",
-                    style: GoogleFonts.inter(
-                      fontSize: 14.sp,
-                      fontWeight: FontWeight.w500,
+                  SizedBox(
+                    width: 200.w,
+                    child: Text(
+                      "Address: ${widget.address}",
+                      overflow: TextOverflow.ellipsis,
+                      style: GoogleFonts.inter(
+
+                        fontSize: 14.sp,
+
+                        fontWeight: FontWeight.w500,
+                      ),
                     ),
                   ),
                   SizedBox(height: 2.h),

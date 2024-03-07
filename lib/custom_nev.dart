@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:pharma/View/Notices/notice.dart';
 
 import 'Utils/app_colors.dart';
 import 'View/Chat/chat_page.dart';
@@ -23,13 +24,15 @@ class _CustomNavigationState extends State<CustomNavigation> {
   List<IconData> icons = [
     FontAwesomeIcons.house,
     FontAwesomeIcons.comments,
-    FontAwesomeIcons.houseMedical,
+    FontAwesomeIcons.bell,
+    FontAwesomeIcons.notesMedical,
     FontAwesomeIcons.gear,
   ];
 
   List<Widget> pages = [
     const Home(),
     const Chat(),
+    const Notice(),
     const Pharmacy(),
     const Profile(),
   ];

@@ -74,6 +74,7 @@ class Authentication with ChangeNotifier {
 
       return "Success";
     } on FirebaseAuthException catch (e) {
+
       Navigator.of(context, rootNavigator: true).pop();
       switch (e.code) {
         case "weak-password":

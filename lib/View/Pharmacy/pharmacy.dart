@@ -1,6 +1,5 @@
 import 'dart:ui';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -9,7 +8,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:pharma/View/Pharmacy/pharmacy_details.dart';
 import 'package:pharma/View/Pharmacy/user_info.dart';
 import 'package:provider/provider.dart';
-
 import '../../Provider/pharmacy_provider.dart';
 import '../../Provider/profile_provider.dart';
 import '../../Utils/custom_loading.dart';
@@ -32,6 +30,17 @@ class _PharmacyState extends State<Pharmacy> {
   Widget build(BuildContext context) {
     var pro = Provider.of<ProfileProvider>(context, listen: false);
     return Scaffold(
+      appBar: AppBar(
+        title:  Text("Pharmacies", style: TextStyle(
+            color: Colors.black,
+            fontSize: 20.sp,
+            fontWeight: FontWeight.w600)),
+        centerTitle: true,
+        backgroundColor: Colors.white,
+        elevation: 0,
+        iconTheme: const IconThemeData(color: Colors.white),
+        leading: null,
+      ),
       body: Align(
           alignment: Alignment.bottomCenter,
           child: Consumer<PharmacyProvider>(
@@ -72,7 +81,7 @@ class _PharmacyState extends State<Pharmacy> {
                           margin: EdgeInsets.fromLTRB(32.w, 10.h, 32.w, 10.h),
                           padding: EdgeInsets.fromLTRB(20.w, 21.h, 5, 20.h),
                           decoration: BoxDecoration(
-                            color: Colors.white,
+                            color: Colors.grey.withOpacity(0.1),
                             borderRadius: BorderRadius.circular(10),
                             border: Border.all(
                                 color: const Color(0xffE3E3E3), width: 1),
@@ -156,7 +165,7 @@ class _PharmacyState extends State<Pharmacy> {
                                           ),
                                           const PopupMenuItem<options>(
                                             value: options.addPharmacists,
-                                            child: Text('Add Pharmacists'),
+                                            child: Text('Add User'),
                                           ),
                                         ],
                                       ),

@@ -27,6 +27,7 @@ class _RegistrationState extends State<Registration> {
   TextEditingController fcodeController = TextEditingController();
 
   final _formKey = GlobalKey<FormState>();
+  bool isChecked = false;
 
   @override
   void dispose() {
@@ -38,9 +39,12 @@ class _RegistrationState extends State<Registration> {
   }
 
   validate() async {
-    if (fcodeController.text.isNotEmpty) {
+    if (isChecked) {
+      if(_formKey.currentState!.validate()){
+        return;
+      }
       if (!fcodeList.contains(fcodeController.text)) {
-        snackBar(context, "Code does not match");
+        snackBar(context, "Invalid odesk id");
         return;
       }
     }
@@ -102,25 +106,52 @@ class _RegistrationState extends State<Registration> {
                     customTextField(passwordController, "Password", context,
                         Icons.lock_outline_rounded),
                     SizedBox(height: 20.h),
+
+                    switchPageButton("Already Have An Account? ", "Log In", context),
+                    SizedBox(height: 10.h),
                     Row(
                       children: [
                         Text(
-                          "Write code if you are a Contractor",
+                          "Are you a contractor?",
+                          style: TextStyle(
+                              fontSize: 13.sp,
+                              color: Theme.of(context).primaryColor),
+                        ),
+                        Checkbox(
+                          tristate: true,
+                          value: isChecked,
+                          onChanged: (bool? value) {
+                            setState(() {
+                              isChecked = value ?? false;
+                            });
+                          },
+                        ),
+                        Text(
+                          "Yes",
                           style: TextStyle(
                               fontSize: 13.sp,
                               color: Theme.of(context).primaryColor),
                         ),
                       ],
                     ),
-                    SizedBox(height: 20.h),
-                    customTextField(fcodeController, "Contractor ID", context,
+                    if(isChecked)Row(
+                      children: [
+                        Text(
+                          "Please provide your odesk code.",
+                          style: TextStyle(
+                              fontSize: 13.sp,
+                              color: Theme.of(context).primaryColor),
+                        ),
+                      ],
+                    ),
+                    if(isChecked)SizedBox(height: 20.h),
+                    if(isChecked)customTextField(fcodeController, "Odesk Code", context,
                         Icons.password_outlined),
                   ],
                 ),
               ),
-              SizedBox(height: 17.h),
-              switchPageButton("Already Have An Account? ", "Log In", context),
-              SizedBox(height: 55.h),
+
+              SizedBox(height: 20.h),
               InkWell(
                 splashColor: Colors.transparent,
                 onTap: () {

@@ -4,8 +4,13 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:pharma/View/profile/sub_page/admin_panel.dart';
 
+import '../../../Provider/profile_provider.dart';
 
+
+import 'package:provider/provider.dart';
 Padding chatTop(BuildContext context) {
+
+  var pro = Provider.of<ProfileProvider>(context, listen: false);
   return Padding(
     padding:  EdgeInsets.symmetric(horizontal: 30.sp),
     child: SizedBox(
@@ -23,7 +28,7 @@ Padding chatTop(BuildContext context) {
                   fontWeight: FontWeight.w600),
             ),
           ),
-           Align(
+          pro.role == "admin" ? Align(
             alignment: Alignment.centerRight,
             child: InkWell(
               onTap: (){
@@ -41,7 +46,7 @@ Padding chatTop(BuildContext context) {
                 size: 18.sp,
               ),
             ),
-          ),
+          ) : SizedBox(),
         ],
       ),
     ),

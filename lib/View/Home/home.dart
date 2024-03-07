@@ -23,7 +23,7 @@ class _HomeState extends State<Home> {
         onWebResourceError: (WebResourceError error) {},
         onNavigationRequest: (NavigationRequest request) {
           if (request.url.startsWith('https://leicestershire-rutland.communitypharmacy.org.uk/')) {
-            return NavigationDecision.prevent;
+            return NavigationDecision.navigate;
           }
           return NavigationDecision.navigate;
         },
