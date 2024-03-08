@@ -178,7 +178,7 @@ Container buildButton(String text,double width,double size,double height) {
     height: height.h,
     width: width.w,
     decoration: BoxDecoration(
-      color: primaryColor,
+      color: secondaryColor,
       borderRadius: BorderRadius.circular(10),
     ),
     child: Center(

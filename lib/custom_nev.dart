@@ -19,7 +19,7 @@ class CustomNavigation extends StatefulWidget {
 }
 
 class _CustomNavigationState extends State<CustomNavigation> {
-  int _bottomNavIndex = 2;
+  int _bottomNavIndex = 0;
 
   List<IconData> icons = [
     FontAwesomeIcons.house,

@@ -1,11 +1,9 @@
-import 'dart:ffi';
 import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
-
+import 'package:firebase_messaging/firebase_messaging.dart';
 import '../Utils/custom_loading.dart';
 import '../Utils/error_dialoge.dart';
 
@@ -30,6 +28,9 @@ class ProfileProvider extends ChangeNotifier {
       role = userInfo["role"];
       email = userInfo["email"];
       currentUserUid = user.uid;
+      if(userInfo["role"] == "contractor" || userInfo["role"] == "admin"){
+        FirebaseMessaging.instance.subscribeToTopic("contractorNotice");
+      }
       notifyListeners();
     }
   }

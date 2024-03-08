@@ -1,14 +1,12 @@
 import 'dart:convert';
-import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_storage/firebase_storage.dart' as storage;
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart';
 import '../../Provider/notice_provider.dart';
+import '../../Utils/app_colors.dart';
 import '../../Utils/custom_loading.dart';
 import '../../Utils/error_dialoge.dart';
 import '../Pharmacy/add_new_post_page.dart';
@@ -18,39 +16,13 @@ class AddNotice extends StatefulWidget {
   AddNotice({Key? key, this.documentSnapshot}) : super(key: key);
   DocumentSnapshot? documentSnapshot;
 
+
   @override
   _AddNoticeState createState() => _AddNoticeState();
 }
 
 class _AddNoticeState extends State<AddNotice> {
-  Future sendNotification(List<String> tokenIdList, String contents,
-      String heading, String url) async {
-    try {
-      return await post(
-        Uri.parse('https://onesignal.com/api/v1/notifications'),
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-          'Authorization':
-              'Basic \u003cZTg0NDI1YzMtNGU3Mi00MDhmLTkwMTYtMmRhYjZhYTJjNDRl\u003e'
-        },
-        body: jsonEncode(<String, dynamic>{
-          "app_id": "kAppId will change",
-          //kAppId is the App Id that one get from the OneSignal When the application is registered.
 
-          "included_segments": ["Subscribed Users"],
-
-          "large_icon": url,
-
-          "headings": {"en": heading},
-
-          "contents": {"en": contents},
-        }),
-      );
-    } catch (e) {
-      print("---------------------------------------------------------");
-      print(e);
-    }
-  }
 
   Future uploadNotice() async {
     try {
@@ -62,6 +34,7 @@ class _AddNoticeState extends State<AddNotice> {
           .addNewNotice(
         postText: postController.text,
         postTitle: titleController.text,
+        databaseName: databaseName,
         dateTime: DateTime.now().toString(),
         context: context,
       )
@@ -74,7 +47,7 @@ class _AddNoticeState extends State<AddNotice> {
             var client = http.Client();
             await client.post(Uri.parse('https://fcm.googleapis.com/fcm/send'),
                 body: jsonEncode({
-                  'to': '/topics/adminNotice',
+                  'to': '/topics/$databaseName',
                   "priority": "high",
                   'notification': {
                     'title': 'Pharma',
@@ -114,6 +87,7 @@ class _AddNoticeState extends State<AddNotice> {
         postText: postController.text,
         id: widget.documentSnapshot!.id,
         postTitle: titleController.text,
+        databaseName: databaseName,
         context: context,
       );
       Navigator.of(context, rootNavigator: true).pop();
@@ -125,6 +99,8 @@ class _AddNoticeState extends State<AddNotice> {
 
   late TextEditingController postController;
   late TextEditingController titleController;
+  String page = "All Users";
+  String databaseName = "notice";
 
   @override
   void initState() {
@@ -179,6 +155,33 @@ class _AddNoticeState extends State<AddNotice> {
                 ],
               ),
             ),
+            Padding(
+
+              padding: EdgeInsets.fromLTRB(30.w, 21.h, 30.w, 20.h),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  InkWell(
+                    onTap: () {
+                      setState(() {
+                        page = "All Users";
+                        databaseName = "notice";
+                      });
+                    },
+                    child: _buildButton("All Users", page == "All Users"),
+                  ),
+                  InkWell(
+                    onTap: () {
+                      setState(() {
+                        page = "Contractor";
+                        databaseName = "contractorNotice";
+                      });
+                    },
+                    child: _buildButton("Contractor", page == "Contractor"),
+                  ),
+                ],
+              ),
+            ),
             buildTextField(titleController, "Title"),
             buildTextField(postController, "Description", maxLine: 6),
           ],
@@ -186,6 +189,26 @@ class _AddNoticeState extends State<AddNotice> {
       ),
     );
   }
+}
+Container _buildButton(String text, bool showBorder) {
+  return Container(
+    height: 50.h,
+    width: 130.w,
+    decoration: BoxDecoration(
+      color: showBorder ? primaryColor : Colors.grey.withOpacity(0.2),
+      borderRadius: BorderRadius.circular(10),
+    ),
+    child: Center(
+      child: Text(
+        text,
+        style: GoogleFonts.inter(
+          fontSize: 16.sp,
+          color: showBorder ? Colors.white : Colors.black,
+          fontWeight: FontWeight.w500,
+        ),
+      ),
+    ),
+  );
 }
 
 Widget buildTitleText(String text, double size, double height) {

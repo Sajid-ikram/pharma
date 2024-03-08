@@ -9,10 +9,11 @@ class NoticeProvider with ChangeNotifier {
     required String postText,
     required String postTitle,
     required String dateTime,
+    required String databaseName,
     required BuildContext context,
   }) async {
     try {
-      FirebaseFirestore.instance.collection("notice").doc().set(
+      FirebaseFirestore.instance.collection(databaseName).doc().set(
         {
           "postText": postText,
           "postTitle": postTitle,
@@ -73,10 +74,11 @@ class NoticeProvider with ChangeNotifier {
     required String postText,
     required String id,
     required String postTitle,
+    required String databaseName,
     required BuildContext context,
   }) async {
     try {
-      FirebaseFirestore.instance.collection("notice").doc(id).update(
+      FirebaseFirestore.instance.collection(databaseName).doc(id).update(
         {
           "postText": postText,
           "postTitle": postTitle,
