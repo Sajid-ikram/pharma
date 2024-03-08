@@ -9,7 +9,7 @@ import 'Utils/custom_loading.dart';
 import 'View/Auth/verification.dart';
 import 'custom_nev.dart';
 
-class Initial extends StatefulWidget {
+/*class Initial extends StatefulWidget {
   const Initial({Key? key}) : super(key: key);
 
   @override
@@ -43,7 +43,7 @@ class _InitialState extends State<Initial> {
       },
     );
   }
-}
+}*/
 
 class MiddleOfHomeAndSignIn extends StatefulWidget {
   const MiddleOfHomeAndSignIn({Key? key}) : super(key: key);

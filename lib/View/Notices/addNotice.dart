@@ -10,11 +10,12 @@ import 'package:provider/provider.dart';
 import 'package:http/http.dart';
 import '../../Provider/notice_provider.dart';
 import '../../Utils/custom_loading.dart';
+import '../../Utils/error_dialoge.dart';
 import '../Pharmacy/add_new_post_page.dart';
+import 'package:http/http.dart' as http;
 
 class AddNotice extends StatefulWidget {
-  AddNotice({Key? key, this.documentSnapshot})
-      : super(key: key);
+  AddNotice({Key? key, this.documentSnapshot}) : super(key: key);
   DocumentSnapshot? documentSnapshot;
 
   @override
@@ -53,6 +54,9 @@ class _AddNoticeState extends State<AddNotice> {
 
   Future uploadNotice() async {
     try {
+      print('Response status:******************');
+
+
       buildLoadingIndicator(context);
 
       Provider.of<NoticeProvider>(context, listen: false)
@@ -63,14 +67,37 @@ class _AddNoticeState extends State<AddNotice> {
         context: context,
       )
           .then((value) async {
-        /*var a = await sendNotification(
-          ["fab732a6-8371-11ec-9974-d6a81ba95cb1"],
-          "There is a new notice",
-          "CSE Department",
-          "https://firebasestorage.googleapis.com/v0/b/lu-cse-community.appspot.com/o/notification%2Flu.png?alt=media&token=8ba2b183-49af-4673-a519-020fa1f3ca74",
-        );
-        print("+++++++++++++++++++++++++++++++++++++++999999999");
-        print(a.body);*/
+        var client = http.Client();
+        try {
+          try{
+            var client = http.Client();
+            await client
+                .post(Uri.parse('https://fcm.googleapis.com/fcm/send'), body:jsonEncode( {
+              'to': '/topics/adminNotice',
+              'notification': {
+                'title': 'Check this Mobile (title)',
+                'body': 'Rich Notification testing (body)'
+              },
+              'data': {
+                'title': titleController.text,
+                'description': postController.text
+              }
+            }), headers: {
+              'Content-Type': 'application/json',
+              // Example header
+              'Authorization':
+              'key=AAAA11afjE8:APA91bHvhOsfthYzR0RRlZ2pwdRwwvBeS0FOvpaI5_sdU8X5TYFwVpGoRr39WrZf9N5OTysmzc8ltc-hmpNnNAwiwmvdqgJAxK0mPRiEyn4OzmWM4muCvfW0mi7SWHrCUTFvo7eA7DdO',
+              // Example header for authentication
+            });
+
+
+          }catch(e){
+            onError(context, "Something went wrong, can not send notification");
+          }
+        } finally {
+          client.close();
+        }
+
       });
       Navigator.of(context, rootNavigator: true).pop();
       Navigator.pop(context);
@@ -152,8 +179,8 @@ class _AddNoticeState extends State<AddNotice> {
                 ],
               ),
             ),
-            buildTextField(titleController , "Title"),
-            buildTextField(postController,"Description", maxLine: 6 ),
+            buildTextField(titleController, "Title"),
+            buildTextField(postController, "Description", maxLine: 6),
           ],
         ),
       ),
@@ -172,8 +199,8 @@ Widget buildTitleText(String text, double size, double height) {
   );
 }
 
-
-Padding buildTextField( TextEditingController controller,String text, {int maxLine = 1}) {
+Padding buildTextField(TextEditingController controller, String text,
+    {int maxLine = 1}) {
   return Padding(
     padding: const EdgeInsets.fromLTRB(32, 30, 32, 0),
     child: TextField(

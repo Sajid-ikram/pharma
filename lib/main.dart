@@ -1,8 +1,11 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:pharma/Provider/chat_provider.dart';
 import 'package:pharma/Provider/notice_provider.dart';
 import 'package:pharma/Provider/post_provider.dart';
+import 'package:pharma/Utils/push_notification.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -12,11 +15,23 @@ import 'Provider/profile_provider.dart';
 import 'Utils/app_colors.dart';
 import 'View/Auth/registration.dart';
 import 'View/Auth/signin.dart';
-import 'View/profile/lodged_in_profile.dart';
+import 'View/Notices/notice_detail.dart';
 import 'View/profile/profile.dart';
+import 'firebase_options.dart';
 import 'initial.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 
-void main()  {
+final navigatorKey = GlobalKey<NavigatorState>();
+
+Future _firebaseBackgroundMessage(RemoteMessage message) async {
+  if (message.notification != null) {
+    print("Some notification Received");
+  }
+}
+
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   /*await Firebase.initializeApp(
     options: const FirebaseOptions(
@@ -26,6 +41,47 @@ void main()  {
       projectId: "pharma-d27ac",
     ),
   );*/
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+
+  // on background notification tapped
+  FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+    if (message.notification != null) {
+      print("Background Notification Tapped");
+      navigatorKey.currentState!.pushNamed("/message", arguments: message);
+    }
+  });
+
+  PushNotifications.init();
+  PushNotifications.localNotiInit();
+
+  // Listen to background notifications
+  FirebaseMessaging.onBackgroundMessage(_firebaseBackgroundMessage);
+
+  // to handle foreground notifications
+  FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+    String payloadData = jsonEncode(message.data);
+    print("Got a message in foreground");
+    if (message.notification != null) {
+      PushNotifications.showSimpleNotification(
+          title: message.notification!.title!,
+          body: message.notification!.body!,
+          payload: payloadData);
+    }
+  });
+
+  // for handling in terminated state
+  final RemoteMessage? message =
+  await FirebaseMessaging.instance.getInitialMessage();
+
+  if (message != null) {
+    print("Launched from terminated state");
+    Future.delayed(Duration(seconds: 1), () {
+      navigatorKey.currentState!.pushNamed("/message", arguments: message);
+    });
+  }
+  FirebaseMessaging.instance.subscribeToTopic("adminNotice");
   runApp(const MyApp());
 }
 
@@ -55,15 +111,17 @@ class MyApp extends StatelessWidget {
         designSize: const Size(360, 800),
         builder: (context, child) {
           return MaterialApp(
+              navigatorKey: navigatorKey,
               debugShowCheckedModeBanner: false,
               title: 'LU Bird',
               theme: _buildTheme(Brightness.light),
-              home: const Initial(),
+              home: const MiddleOfHomeAndSignIn(),
               routes: {
                 "SignIn": (ctx) => const SignIn(),
                 "Registration": (ctx) => const Registration(),
                 "MiddleOfHomeAndSignIn": (ctx) => const MiddleOfHomeAndSignIn(),
                 "Profile": (ctx) =>  const Profile(),
+                "/message": (ctx) =>  const Message(),
 
               });
         },
