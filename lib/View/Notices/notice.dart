@@ -41,6 +41,7 @@ class _NoticeState extends State<Notice> {
         ),
         backgroundColor: Colors.white,
         elevation: 0,
+        leading: null,
         actions: [
           Padding(
             padding: EdgeInsets.only(right: 15.w),
@@ -101,10 +102,10 @@ class _NoticeState extends State<Notice> {
                         ),
                         child: Column(
                           children: [
-                            Stack(
+                            const Stack(
                               children: [
                                 Text("Admin Notice"),
-                                if (pro.currentUserUid ==
+                                /*if (pro.currentUserUid ==
                                     data?.docs[index]["ownerUid"])
                                   Positioned(
                                     right: 0,
@@ -116,7 +117,7 @@ class _NoticeState extends State<Notice> {
                                           _showMyDialog(context,
                                               data?.docs[index].id ?? "");
                                         } else if (result == WhyFarther.edit) {
-                                          /* Navigator.push(
+                                          *//* Navigator.push(
                                             context,
                                             MaterialPageRoute(
                                               builder: (context) =>
@@ -126,7 +127,7 @@ class _NoticeState extends State<Notice> {
                                                     data?.docs[index],
                                               ),
                                             ),
-                                          );*/
+                                          );*//*
                                         }
                                       },
                                       itemBuilder: (BuildContext context) =>
@@ -141,12 +142,25 @@ class _NoticeState extends State<Notice> {
                                         ),
                                       ],
                                     ),
-                                  )
+                                  )*/
                               ],
                             ),
                             SizedBox(height: 18.h),
                             Padding(
                               padding: EdgeInsets.only(right: 15.w),
+                              child: Align(
+                                alignment: Alignment.centerLeft,
+                                child: Text(
+                                  "Title: ${data?.docs[index]["postTitle"]}",
+                                  textAlign: TextAlign.justify,
+                                  style: GoogleFonts.inter(
+                                      fontSize: 15.sp, height: 1.4),
+                                ),
+                              ),
+                            ),
+                            SizedBox(height: 18.h),
+                            Padding(
+                              padding: EdgeInsets.only(right: 14.w),
                               child: Align(
                                 alignment: Alignment.centerLeft,
                                 child: Text(

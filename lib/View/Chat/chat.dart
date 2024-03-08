@@ -13,11 +13,13 @@ import '../../Provider/profile_provider.dart';
 
 class Chat extends StatefulWidget {
   const Chat(
-      {Key? key, required this.name, required this.url, required this.uid})
+      {Key? key, required this.name, required this.url, required this.uid, required this.token, this.isFromNotification})
       : super(key: key);
 
   final String name;
   final String url;
+  final bool? isFromNotification;
+  final String token;
   final String uid;
 
   @override
@@ -43,7 +45,7 @@ class _ChatState extends State<Chat> {
       body: Column(
         children: [
           SizedBox(height: 60.h),
-          buildChatTop(context, widget.name, widget.url),
+          buildChatTop(context, widget.name, widget.url,isFromNotification: widget.isFromNotification),
           buildAllChats(pro, widget.uid),
           Consumer<ChatProvider>(
             builder: (context, provider, child) {
@@ -84,6 +86,8 @@ class _ChatState extends State<Chat> {
                               message: _controller.text,
                               myUid: pro.currentUserUid,
                               receiverUid: widget.uid,
+                              token: widget.token,
+                              senderName: pro.profileName
                             );
                             _controller.clear();
                           }

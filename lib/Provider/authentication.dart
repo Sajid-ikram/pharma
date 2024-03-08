@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 
 class Authentication with ChangeNotifier {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
@@ -12,11 +13,19 @@ class Authentication with ChangeNotifier {
   Future<String> signIn(
       String email, String password, BuildContext context) async {
     try {
-      await _firebaseAuth.signInWithEmailAndPassword(
+      var user = await _firebaseAuth.signInWithEmailAndPassword(
         email: email,
         password: password,
       );
-
+      final token = await FirebaseMessaging.instance.getToken();
+      FirebaseFirestore.instance
+          .collection("users")
+          .doc(user.user?.uid)
+          .update(
+        {
+          "token": token,
+        },
+      );
       return "Success";
     } on FirebaseAuthException catch (e) {
       switch (e.code) {
@@ -53,10 +62,11 @@ class Authentication with ChangeNotifier {
         password: password,
       )
           .then(
-        (value) {
+        (value) async {
           Navigator.of(context, rootNavigator: true).pop();
           if (isRegistration)
             Navigator.of(context).pushReplacementNamed("MiddleOfHomeAndSignIn");
+          final token = await FirebaseMessaging.instance.getToken();
           FirebaseFirestore.instance
               .collection("users")
               .doc(value.user!.uid)
@@ -66,7 +76,7 @@ class Authentication with ChangeNotifier {
               "email": value.user!.email,
               "url": "",
               "role": fCode.isEmpty ? "" : "contractor",
-
+              "token": token
             },
           );
         },
@@ -133,6 +143,7 @@ class Authentication with ChangeNotifier {
             "email": credential.user!.email,
             "url": "",
             "role": "",
+            "token": "",
           },
         );
         FirebaseFirestore.instance

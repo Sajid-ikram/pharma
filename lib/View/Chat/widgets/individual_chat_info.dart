@@ -69,7 +69,7 @@ class _IndividualChatInfoState extends State<IndividualChatInfo> {
                 context,
                 MaterialPageRoute(
                   builder: (context) =>
-                      Chat(name: data["name"], url: data["url"], uid: data.id),
+                      Chat(name: data["name"], url: data["url"], uid: data.id,token: data["token"],),
                 ),
               );
             },

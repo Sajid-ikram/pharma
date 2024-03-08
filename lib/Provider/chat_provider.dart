@@ -1,5 +1,9 @@
+import 'dart:convert';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:http/http.dart' as http;
+import 'package:pharma/Provider/profile_provider.dart';
 var encryptionKey ='sdkgh48598ysjhgs98g734kdhf';
 
 class ChatProvider with ChangeNotifier {
@@ -90,7 +94,9 @@ class ChatProvider with ChangeNotifier {
 
   Future addMessage({
     required String message,
+    required String senderName,
     required String myUid,
+    required String token,
     required String receiverUid,
   }) async {
     await FirebaseFirestore.instance
@@ -105,6 +111,39 @@ class ChatProvider with ChangeNotifier {
         "ts": DateTime.now().toString(),
       },
     );
+
+    try{
+      print(myUid);
+      print(senderName);
+      print("myUid----------------------------------------");
+      var client = http.Client();
+      var a = await client.post(Uri.parse('https://fcm.googleapis.com/fcm/send'),
+          body: jsonEncode({
+            'to': token,
+            "priority": "high",
+            'notification': {
+              'title': senderName,
+              'body': message
+            },
+            'data': {
+              'message': message,
+              'uid': myUid
+            }
+          }),
+          headers: {
+            'Content-Type': 'application/json',
+            // Example header
+            'Authorization':
+            'key=AAAA11afjE8:APA91bHvhOsfthYzR0RRlZ2pwdRwwvBeS0FOvpaI5_sdU8X5TYFwVpGoRr39WrZf9N5OTysmzc8ltc-hmpNnNAwiwmvdqgJAxK0mPRiEyn4OzmWM4muCvfW0mi7SWHrCUTFvo7eA7DdO',
+            // Example header for authentication
+          });
+      print(a);
+      print(a.body);
+      print("-------------------------------------------------ii");
+    }catch(e){
+      print("ererrrrrrrrrrrrrrrrrrrrrr");
+      print(e);
+    }
 
     FirebaseFirestore.instance.collection("chatRooms").doc(chatId).update(
       {

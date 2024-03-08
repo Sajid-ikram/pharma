@@ -56,7 +56,6 @@ class _AddNoticeState extends State<AddNotice> {
     try {
       print('Response status:******************');
 
-
       buildLoadingIndicator(context);
 
       Provider.of<NoticeProvider>(context, listen: false)
@@ -69,35 +68,36 @@ class _AddNoticeState extends State<AddNotice> {
           .then((value) async {
         var client = http.Client();
         try {
-          try{
+          try {
+            // i know this is not a good way of sending notification but I don't
+            // have enough time to make a custom backend to store auth key and manage this process from the backend.
             var client = http.Client();
-            await client
-                .post(Uri.parse('https://fcm.googleapis.com/fcm/send'), body:jsonEncode( {
-              'to': '/topics/adminNotice',
-              'notification': {
-                'title': 'Check this Mobile (title)',
-                'body': 'Rich Notification testing (body)'
-              },
-              'data': {
-                'title': titleController.text,
-                'description': postController.text
-              }
-            }), headers: {
-              'Content-Type': 'application/json',
-              // Example header
-              'Authorization':
-              'key=AAAA11afjE8:APA91bHvhOsfthYzR0RRlZ2pwdRwwvBeS0FOvpaI5_sdU8X5TYFwVpGoRr39WrZf9N5OTysmzc8ltc-hmpNnNAwiwmvdqgJAxK0mPRiEyn4OzmWM4muCvfW0mi7SWHrCUTFvo7eA7DdO',
-              // Example header for authentication
-            });
-
-
-          }catch(e){
+            await client.post(Uri.parse('https://fcm.googleapis.com/fcm/send'),
+                body: jsonEncode({
+                  'to': '/topics/adminNotice',
+                  "priority": "high",
+                  'notification': {
+                    'title': 'Pharma',
+                    'body': 'You have a new notice'
+                  },
+                  'data': {
+                    'title': titleController.text,
+                    'description': postController.text
+                  }
+                }),
+                headers: {
+                  'Content-Type': 'application/json',
+                  // Example header
+                  'Authorization':
+                      'key=AAAA11afjE8:APA91bHvhOsfthYzR0RRlZ2pwdRwwvBeS0FOvpaI5_sdU8X5TYFwVpGoRr39WrZf9N5OTysmzc8ltc-hmpNnNAwiwmvdqgJAxK0mPRiEyn4OzmWM4muCvfW0mi7SWHrCUTFvo7eA7DdO',
+                  // Example header for authentication
+                });
+          } catch (e) {
             onError(context, "Something went wrong, can not send notification");
           }
         } finally {
           client.close();
         }
-
       });
       Navigator.of(context, rootNavigator: true).pop();
       Navigator.pop(context);

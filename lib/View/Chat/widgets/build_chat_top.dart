@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:pharma/initial.dart';
 import 'package:provider/provider.dart';
 
 import '../../../Provider/chat_provider.dart';
 
-Padding buildChatTop(BuildContext context,String name,String url) {
+Padding buildChatTop(BuildContext context,String name,String url,
+    {bool? isFromNotification}) {
   return Padding(
     padding: EdgeInsets.symmetric(horizontal: 30.sp),
     child: SizedBox(
@@ -18,7 +20,13 @@ Padding buildChatTop(BuildContext context,String name,String url) {
             highlightColor: Colors.transparent,
             onTap: () {
               Provider.of<ChatProvider>(context,listen: false).chatId = "";
-              Navigator.of(context).pop();
+              if(isFromNotification == null){
+                Navigator.of(context).pop();
+              }else{
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => MiddleOfHomeAndSignIn()));
+              }
+
             },
             child: Align(
               alignment: Alignment.centerLeft,

@@ -6,6 +6,7 @@ import 'package:pharma/Provider/chat_provider.dart';
 import 'package:pharma/Provider/notice_provider.dart';
 import 'package:pharma/Provider/post_provider.dart';
 import 'package:pharma/Utils/push_notification.dart';
+import 'package:pharma/View/Chat/holdin_page.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -27,6 +28,7 @@ final navigatorKey = GlobalKey<NavigatorState>();
 
 Future _firebaseBackgroundMessage(RemoteMessage message) async {
   if (message.notification != null) {
+
     print("Some notification Received");
   }
 }
@@ -48,8 +50,14 @@ void main() async {
   // on background notification tapped
   FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
     if (message.notification != null) {
-      print("Background Notification Tapped");
-      navigatorKey.currentState!.pushNamed("/message", arguments: message);
+      if (message.notification!.title == "Pharma") {
+        print("Background Notification Tapped for notice");
+        navigatorKey.currentState!.pushNamed("/message", arguments: message);
+      }else{
+        print("Background Notification Tapped for chat");
+        navigatorKey.currentState!.pushNamed("/holdingPage", arguments: message);
+      }
+
     }
   });
 
@@ -64,22 +72,31 @@ void main() async {
     String payloadData = jsonEncode(message.data);
     print("Got a message in foreground");
     if (message.notification != null) {
-      PushNotifications.showSimpleNotification(
-          title: message.notification!.title!,
-          body: message.notification!.body!,
-          payload: payloadData);
+      if (message.notification!.title == "Pharma") {
+        PushNotifications.showSimpleNotification(
+            title: message.notification!.title!,
+            body: message.notification!.body!,
+            payload: payloadData);
+      }
     }
   });
 
   // for handling in terminated state
   final RemoteMessage? message =
-  await FirebaseMessaging.instance.getInitialMessage();
+      await FirebaseMessaging.instance.getInitialMessage();
 
   if (message != null) {
     print("Launched from terminated state");
-    Future.delayed(Duration(seconds: 1), () {
-      navigatorKey.currentState!.pushNamed("/message", arguments: message);
-    });
+    if (message.notification!.title == "Pharma"){
+      Future.delayed(Duration(seconds: 1), () {
+        navigatorKey.currentState!.pushNamed("/message", arguments: message);
+      });
+    }else{
+      Future.delayed(Duration(seconds: 1), () {
+        navigatorKey.currentState!.pushNamed("/holdingPage", arguments: message);
+      });
+    }
+
   }
   FirebaseMessaging.instance.subscribeToTopic("adminNotice");
   runApp(const MyApp());
@@ -120,9 +137,9 @@ class MyApp extends StatelessWidget {
                 "SignIn": (ctx) => const SignIn(),
                 "Registration": (ctx) => const Registration(),
                 "MiddleOfHomeAndSignIn": (ctx) => const MiddleOfHomeAndSignIn(),
-                "Profile": (ctx) =>  const Profile(),
-                "/message": (ctx) =>  const Message(),
-
+                "Profile": (ctx) => const Profile(),
+                "/message": (ctx) => const Message(),
+                "/holdingPage": (ctx) => const HoldingPage(),
               });
         },
       ),

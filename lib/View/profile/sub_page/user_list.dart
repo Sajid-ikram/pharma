@@ -53,6 +53,7 @@ class _UserListState extends State<UserList> {
                         builder: (context) => Chat(
                           name: data?.docs[index]["name"],
                           url: data?.docs[index]["url"],
+                          token: data?.docs[index]["token"],
                           uid: data!.docs[index].id,
                         ),
                       ),
