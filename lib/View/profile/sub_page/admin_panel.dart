@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../../Utils/app_colors.dart';
+import '../../../Utils/search_bar.dart';
 import 'user_list.dart';
 
 class AdminPanel extends StatefulWidget {
@@ -72,6 +73,8 @@ class _AdminPanelState extends State<AdminPanel> {
               thickness: 1,
               height: 0,
             ),
+            SizedBox(height: 12.h),
+            buildSearch(context, "user"),
             SizedBox(height: 12.h),
              Expanded(child: UserList(isAdminPanel: widget.isAdminPanel,))
           ],

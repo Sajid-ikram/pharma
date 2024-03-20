@@ -24,6 +24,7 @@ class _RegistrationState extends State<Registration> {
   TextEditingController nameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+  TextEditingController confirmPasswordController = TextEditingController();
   TextEditingController fcodeController = TextEditingController();
 
   final _formKey = GlobalKey<FormState>();
@@ -34,13 +35,19 @@ class _RegistrationState extends State<Registration> {
     nameController.clear();
     emailController.clear();
     passwordController.clear();
+    confirmPasswordController.clear();
     fcodeController.clear();
     super.dispose();
   }
 
   validate() async {
     if (isChecked) {
-      if(_formKey.currentState!.validate()){
+      if (!_formKey.currentState!.validate()) {
+        print("invalid *------------------------");
+        return;
+      }
+      if (confirmPasswordController.text != passwordController.text) {
+        snackBar(context, "Password does not match");
         return;
       }
       if (!fcodeList.contains(fcodeController.text)) {
@@ -50,6 +57,10 @@ class _RegistrationState extends State<Registration> {
     }
     if (_formKey.currentState!.validate()) {
       try {
+        if (confirmPasswordController.text != passwordController.text) {
+          snackBar(context, "Password does not match");
+          return;
+        }
         buildLoadingIndicator(context);
         Provider.of<Authentication>(context, listen: false)
             .signUp(
@@ -106,8 +117,14 @@ class _RegistrationState extends State<Registration> {
                     customTextField(passwordController, "Password", context,
                         Icons.lock_outline_rounded),
                     SizedBox(height: 20.h),
-
-                    switchPageButton("Already Have An Account? ", "Log In", context),
+                    customTextField(
+                        confirmPasswordController,
+                        "Confirm Password",
+                        context,
+                        Icons.lock_outline_rounded),
+                    SizedBox(height: 20.h),
+                    switchPageButton(
+                        "Already Have An Account? ", "Log In", context),
                     SizedBox(height: 10.h),
                     Row(
                       children: [
@@ -134,23 +151,24 @@ class _RegistrationState extends State<Registration> {
                         ),
                       ],
                     ),
-                    if(isChecked)Row(
-                      children: [
-                        Text(
-                          "Please provide your odesk code.",
-                          style: TextStyle(
-                              fontSize: 13.sp,
-                              color: Theme.of(context).primaryColor),
-                        ),
-                      ],
-                    ),
-                    if(isChecked)SizedBox(height: 20.h),
-                    if(isChecked)customTextField(fcodeController, "Odesk Code", context,
-                        Icons.password_outlined),
+                    if (isChecked)
+                      Row(
+                        children: [
+                          Text(
+                            "Please provide your odesk code.",
+                            style: TextStyle(
+                                fontSize: 13.sp,
+                                color: Theme.of(context).primaryColor),
+                          ),
+                        ],
+                      ),
+                    if (isChecked) SizedBox(height: 20.h),
+                    if (isChecked)
+                      customTextField(fcodeController, "Odesk Code", context,
+                          Icons.password_outlined),
                   ],
                 ),
               ),
-
               SizedBox(height: 20.h),
               InkWell(
                 splashColor: Colors.transparent,

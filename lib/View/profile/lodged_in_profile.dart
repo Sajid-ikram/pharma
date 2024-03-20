@@ -10,6 +10,7 @@ import 'package:provider/provider.dart';
 import '../../Provider/authentication.dart';
 import '../../Provider/profile_provider.dart';
 import '../Pharmacy/add_new_post_page.dart';
+import '../Pharmacy/pharmacy.dart';
 
 class LodgedInProfile extends StatelessWidget {
   const LodgedInProfile({Key? key}) : super(key: key);
@@ -47,6 +48,7 @@ Widget topWidget(Size size, ProfileProvider pro, BuildContext context) {
   final List<String> listName = [
     "Edit Profile",
     "Create Pharmacy",
+    "My Pharmacy",
     "Admin Panel",
     "LogOut",
   ];
@@ -54,6 +56,7 @@ Widget topWidget(Size size, ProfileProvider pro, BuildContext context) {
   final List<IconData> listIcons = [
     Icons.person_outline,
     Icons.local_pharmacy_rounded,
+    Icons.local_pharmacy_outlined,
     Icons.security,
     Icons.login_outlined,
   ];
@@ -95,27 +98,35 @@ Widget topWidget(Size size, ProfileProvider pro, BuildContext context) {
                     onTap: () {
                       if (index == 0) {
                         Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) =>  EditProfile()));
+                            builder: (context) => EditProfile()));
                       } else if (index == 1) {
                         Navigator.of(context).push(MaterialPageRoute(
                             builder: (context) => AddNewPostPage()));
-                      }else if (index == 2) {
+                      } else if (index == 2) {
+                        //Navigator.of(context).pushNamed("GPSSetting");
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => Pharmacy(
+                                  isMyPharmacyPage: true,
+                                )));
+                      } else if (index == 3) {
                         //Navigator.of(context).pushNamed("GPSSetting");
                         Navigator.of(context).push(MaterialPageRoute(
                             builder: (context) => AdminPanel()));
-                      }  else if (index == 3) {
+                      } else if (index == 4) {
                         Provider.of<Authentication>(context, listen: false)
                             .signOut();
-                        Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => SignIn()));
+                        Navigator.of(context).push(
+                            MaterialPageRoute(builder: (context) => SignIn()));
                       }
                     },
                     child: pro.role == "admin" || pro.role == "contractor"
-                        ? profileList(
-                            listName[index],
-                            listIcons[index],
-                          )
-                        : index == 1 || index == 2
+                        ? pro.role == "contractor" && index == 3
+                            ? const SizedBox()
+                            : profileList(
+                                listName[index],
+                                listIcons[index],
+                              )
+                        : index == 1 || index == 2 || index == 3
                             ? const SizedBox()
                             : profileList(
                                 listName[index],

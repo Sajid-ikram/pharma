@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:pharma/Provider/chat_provider.dart';
 import 'package:pharma/Provider/notice_provider.dart';
 import 'package:pharma/Provider/post_provider.dart';
+import 'package:pharma/Provider/search_provider.dart';
 import 'package:pharma/Utils/push_notification.dart';
 import 'package:pharma/View/Chat/holdin_page.dart';
 import 'package:provider/provider.dart';
@@ -123,6 +124,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => PostProvider()),
         ChangeNotifierProvider(create: (_) => ChatProvider()),
         ChangeNotifierProvider(create: (_) => NoticeProvider()),
+        ChangeNotifierProvider(create: (_) => SearchProvider()),
       ],
       child: ScreenUtilInit(
         designSize: const Size(360, 800),

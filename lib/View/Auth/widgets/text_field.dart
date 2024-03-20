@@ -32,34 +32,38 @@ Center customTextField(TextEditingController controller, String text,
             snackBar(context, "Name should contain only character");
             return "Name should contain only character";
           }
-        } /*else if (text == "Valid email" || text == "Enter your email") {
-          if (value != null && !value.contains("@lus.ac.bd")) {
-            snackBar(context, "You have to use LU G Suite Email");
-            return "You have to use LU G Suite Email";
+        }
+        else if (text == "NHS email") {
+          if (value != null && !value.contains("@gmail.com")) {
+            snackBar(context, "You have to use a Gmail account");
+            return "You have to use a Gmail account";
           } else if (value == null || value.isEmpty) {
             snackBar(context, "Field can not be empty!");
             return "Field can not be empty!";
           }
-        }*/ else if (text == "Password") {
-          if (value != null && value.length < 6) {
+        }
+        else if (text == "Password" || text == "Confirm Password") {
+          if (value == null || value.isEmpty) {
+            snackBar(context, "Field can not be empty!");
+            return "Field can not be empty!";
+          } else if (value.length < 6) {
             snackBar(context, "Password should be at least 6 character long");
             return "Password should be at least 6 character long";
-          } else if (value == null || value.isEmpty) {
-            snackBar(context, "Field can not be empty!");
-            return "Field can not be empty!";
           }
         } else if (text == "Odesk Code") {
-            if (value == null || value.isEmpty) {
+          if (value == null || value.isEmpty) {
             snackBar(context, "Field can not be empty!");
             return "Field can not be empty!";
           }
-        } /*else if (value == null || value.isEmpty) {
+          return null;
+        }
+        /*else if (value == null || value.isEmpty) {
           snackBar(context, "Field can not be empty!");
           return "Field can not be empty!";
         }*/
         return null;
       },
-      obscureText: text == "Password" ? true : false,
+      obscureText: text == "Password"|| text == "Confirm Password" ? true : false,
       /*decoration: InputDecoration(
             suffixIcon: Icon(iconData),
             errorStyle: const TextStyle(fontSize: 0.01),

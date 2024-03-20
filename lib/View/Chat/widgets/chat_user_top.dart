@@ -24,7 +24,7 @@ Padding chatTop(BuildContext context) {
               "Massage",
               style: TextStyle(
                   color: Colors.black,
-                  fontSize: 20.sp,
+                  fontSize: 18.sp,
                   fontWeight: FontWeight.w600),
             ),
           ),
