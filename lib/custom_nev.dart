@@ -11,6 +11,7 @@ import 'View/Home/home.dart';
 import 'View/Notices/notice_middle_page.dart';
 import 'View/Pharmacy/pharmacy.dart';
 import 'View/profile/profile.dart';
+import 'View/profile/sub_page/profile_detail.dart';
 
 class CustomNavigation extends StatefulWidget {
   const CustomNavigation({Key? key}) : super(key: key);
@@ -34,7 +35,7 @@ class _CustomNavigationState extends State<CustomNavigation> {
     const Home(),
     const Chat(),
     const NoticeMiddlePage(),
-     Pharmacy(),
+    Pharmacy(),
     const Profile(),
   ];
 
@@ -46,10 +47,9 @@ class _CustomNavigationState extends State<CustomNavigation> {
       body: pages[_bottomNavIndex],
       bottomNavigationBar: AnimatedBottomNavigationBar(
         shadow: BoxShadow(
-          color: Colors.grey.withOpacity(0.2),
-              offset: const Offset(0, -15),
-          blurRadius: 10
-        ),
+            color: Colors.grey.withOpacity(0.2),
+            offset: const Offset(0, -15),
+            blurRadius: 10),
         icons: icons,
         notchSmoothness: NotchSmoothness.softEdge,
         activeIndex: _bottomNavIndex,

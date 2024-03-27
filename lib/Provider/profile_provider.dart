@@ -14,9 +14,18 @@ class ProfileProvider extends ChangeNotifier {
   String email = '';
   String currentUserUid = '';
 
-  bool refreshAssignBus = false;
+  String? pharmacyRole;
+  String? roleOther;
+  String? number;
+  String? isIndependentPrescriber;
+  String? clinicalArea;
+  String? GPHCNumber;
+  String? bestDescribe;
 
-  getUserInfo() async {
+  bool refreshAssignBus = false;
+  bool isProfileComplete = true;
+
+  Future getUserInfo() async {
     final User? user = FirebaseAuth.instance.currentUser;
     if (user != null) {
       DocumentSnapshot userInfo = await FirebaseFirestore.instance
@@ -28,8 +37,24 @@ class ProfileProvider extends ChangeNotifier {
       role = userInfo["role"];
       email = userInfo["email"];
       currentUserUid = user.uid;
-      if(userInfo["role"] == "contractor" || userInfo["role"] == "admin"){
+
+      if (userInfo["role"] == "contractor" || userInfo["role"] == "admin") {
         FirebaseMessaging.instance.subscribeToTopic("contractorNotice");
+      }
+
+      try {
+        pharmacyRole = userInfo["pharmacyRole"];
+        roleOther = userInfo["roleOther"];
+        number = userInfo["number"];
+        isIndependentPrescriber = userInfo["isIndependentPrescriber"];
+        clinicalArea = userInfo["clinicalArea"];
+        GPHCNumber = userInfo["GPHCNumber"];
+        bestDescribe = userInfo["bestDescribe"];
+      } catch (e) {
+        print("error---------------");
+        isProfileComplete = false;
+        print(isProfileComplete);
+        print(e);
       }
       notifyListeners();
     }
@@ -51,6 +76,39 @@ class ProfileProvider extends ChangeNotifier {
       );
       if (id == null) profileName = name;
 
+      notifyListeners();
+    } catch (e) {
+      return onError(context, "Having problem connecting to the server");
+    }
+  }
+
+  Future addAdditionalProfileInfo({
+    required String role,
+    required String roleOther,
+    required String number,
+    required String isIndependentPrescriber,
+    required String clinicalArea,
+    required String GPHCNumber,
+    required String bestDescribe,
+    String? id,
+    required BuildContext context,
+  }) async {
+    try {
+      FirebaseFirestore.instance
+          .collection("users")
+          .doc(id ?? currentUserUid)
+          .set({
+        // Include all existing fields along with the new field
+
+        'pharmacyRole': role,
+        'roleOther': roleOther,
+        'number': number,
+        'isIndependentPrescriber': isIndependentPrescriber,
+        'clinicalArea': clinicalArea,
+        'GPHCNumber': GPHCNumber,
+        'bestDescribe': bestDescribe,
+      }, SetOptions(merge: true));
+      isProfileComplete = true;
       notifyListeners();
     } catch (e) {
       return onError(context, "Having problem connecting to the server");

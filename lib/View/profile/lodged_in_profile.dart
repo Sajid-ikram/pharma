@@ -6,6 +6,7 @@ import 'package:pharma/View/profile/profile_widget/profile_image.dart';
 import 'package:pharma/View/profile/profile_widget/profile_list.dart';
 import 'package:pharma/View/profile/sub_page/admin_panel.dart';
 import 'package:pharma/View/profile/sub_page/edit_profile.dart';
+import 'package:pharma/View/profile/sub_page/profile_detail.dart';
 import 'package:provider/provider.dart';
 import '../../Provider/authentication.dart';
 import '../../Provider/profile_provider.dart';
@@ -50,6 +51,7 @@ Widget topWidget(Size size, ProfileProvider pro, BuildContext context) {
     "Create Pharmacy",
     "My Pharmacy",
     "Admin Panel",
+    "Profile Detail",
     "LogOut",
   ];
 
@@ -58,6 +60,7 @@ Widget topWidget(Size size, ProfileProvider pro, BuildContext context) {
     Icons.local_pharmacy_rounded,
     Icons.local_pharmacy_outlined,
     Icons.security,
+    Icons.format_align_center,
     Icons.login_outlined,
   ];
 
@@ -113,6 +116,10 @@ Widget topWidget(Size size, ProfileProvider pro, BuildContext context) {
                         Navigator.of(context).push(MaterialPageRoute(
                             builder: (context) => AdminPanel()));
                       } else if (index == 4) {
+
+                        Navigator.of(context).push(
+                            MaterialPageRoute(builder: (context) => ProfileDetails()));
+                      } else if (index == 5) {
                         Provider.of<Authentication>(context, listen: false)
                             .signOut();
                         Navigator.of(context).push(

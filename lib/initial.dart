@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 import 'Provider/profile_provider.dart';
 import 'Utils/custom_loading.dart';
 import 'View/Auth/verification.dart';
+import 'View/profile/sub_page/profile_detail.dart';
 import 'custom_nev.dart';
 
 /*class Initial extends StatefulWidget {
@@ -57,7 +58,14 @@ class _MiddleOfHomeAndSignInState extends State<MiddleOfHomeAndSignIn> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    Provider.of<ProfileProvider>(context, listen: false).getUserInfo();
+    Provider.of<ProfileProvider>(context, listen: false)
+        .getUserInfo()
+        .then((value) {
+      if (!Provider.of<ProfileProvider>(context, listen: false)
+          .isProfileComplete) {
+        _showMyDialog(context);
+      }
+    });
   }
 
   @override
@@ -77,4 +85,32 @@ class _MiddleOfHomeAndSignInState extends State<MiddleOfHomeAndSignIn> {
       },
     );
   }
+}
+
+Future<void> _showMyDialog(BuildContext context) async {
+  return showDialog<void>(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: const Text('Complete Your Profile'),
+        content: const SingleChildScrollView(
+          child: ListBody(
+            children: <Widget>[
+              Text('Add details to complete your profile'),
+            ],
+          ),
+        ),
+        actions: <Widget>[
+          TextButton(
+            child: const Text('Ok'),
+            onPressed: () {
+              Navigator.of(context).pop();
+              Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => ProfileDetails()));
+            },
+          ),
+        ],
+      );
+    },
+  );
 }

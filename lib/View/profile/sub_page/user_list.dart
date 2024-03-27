@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:pharma/View/profile/sub_page/view_profile.dart';
 import 'package:provider/provider.dart';
 
 import '../../../Provider/profile_provider.dart';
@@ -70,13 +71,7 @@ class _UserListState extends State<UserList> {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) =>
-                    Chat(
-                      name: data?.docs[index]["name"],
-                      url: data?.docs[index]["url"],
-                      token: data?.docs[index]["token"],
-                      uid: data!.docs[index].id,
-                    ),
+                builder: (context) => ViewProfile(id: data!.docs[index].id,),
               ),
             );
           },
@@ -88,17 +83,17 @@ class _UserListState extends State<UserList> {
               children: [
                 data?.docs[index]["url"] != ""
                     ? CircleAvatar(
-                  backgroundColor: Colors.grey,
-                  radius: 21,
-                  backgroundImage: NetworkImage(
-                    data?.docs[index]["url"],
-                  ),
-                )
+                        backgroundColor: Colors.grey,
+                        radius: 21,
+                        backgroundImage: NetworkImage(
+                          data?.docs[index]["url"],
+                        ),
+                      )
                     : const CircleAvatar(
-                  backgroundColor: Colors.grey,
-                  radius: 21,
-                  backgroundImage: AssetImage("assets/profile.jpg"),
-                ),
+                        backgroundColor: Colors.grey,
+                        radius: 21,
+                        backgroundImage: AssetImage("assets/profile.jpg"),
+                      ),
                 SizedBox(width: 12.w),
                 Text(
                   name.length > 13 ? '${name.substring(0, 13)}...' : name,
@@ -116,21 +111,20 @@ class _UserListState extends State<UserList> {
                 SizedBox(width: 10.w),
                 pro.role == "admin" || pro.role == "contractor"
                     ? widget.isAdminPanel != null
-                    ? const SizedBox()
-                    : InkWell(
-                  onTap: () {
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) =>
-                            EditProfile(
-                              id: data!.docs[index].id,
-                            )));
-                  },
-                  child: Icon(
-                    Icons.edit,
-                    size: 15.sp,
-                    color: Colors.red,
-                  ),
-                )
+                        ? const SizedBox()
+                        : InkWell(
+                            onTap: () {
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (context) => EditProfile(
+                                        id: data!.docs[index].id,
+                                      )));
+                            },
+                            child: Icon(
+                              Icons.edit,
+                              size: 15.sp,
+                              color: Colors.red,
+                            ),
+                          )
                     : SizedBox(width: 40.w),
               ],
             ),
@@ -150,8 +144,8 @@ class _UserListState extends State<UserList> {
         role == "admin"
             ? "Admin"
             : role == "contractor"
-            ? "Contractor"
-            : "User",
+                ? "Contractor"
+                : "User",
         style: TextStyle(
           fontSize: 15.sp,
           fontWeight: FontWeight.w400,

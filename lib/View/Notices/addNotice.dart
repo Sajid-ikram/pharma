@@ -16,14 +16,11 @@ class AddNotice extends StatefulWidget {
   AddNotice({Key? key, this.documentSnapshot}) : super(key: key);
   DocumentSnapshot? documentSnapshot;
 
-
   @override
   _AddNoticeState createState() => _AddNoticeState();
 }
 
 class _AddNoticeState extends State<AddNotice> {
-
-
   Future uploadNotice() async {
     try {
       print('Response status:******************');
@@ -50,8 +47,12 @@ class _AddNoticeState extends State<AddNotice> {
                   'to': '/topics/$databaseName',
                   "priority": "high",
                   'notification': {
-                    'title': 'Pharma',
-                    'body': 'You have a new notice'
+                    'title': titleController.text.isEmpty
+                        ? 'Pharma'
+                        : titleController.text,
+                    'body': postController.text.isEmpty
+                        ? 'You have a new notice'
+                        : postController.text
                   },
                   'data': {
                     'title': titleController.text,
@@ -156,7 +157,6 @@ class _AddNoticeState extends State<AddNotice> {
               ),
             ),
             Padding(
-
               padding: EdgeInsets.fromLTRB(30.w, 21.h, 30.w, 20.h),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -190,6 +190,7 @@ class _AddNoticeState extends State<AddNotice> {
     );
   }
 }
+
 Container _buildButton(String text, bool showBorder) {
   return Container(
     height: 50.h,

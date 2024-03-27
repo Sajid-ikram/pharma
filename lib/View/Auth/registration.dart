@@ -151,11 +151,11 @@ class _RegistrationState extends State<Registration> {
                         ),
                       ],
                     ),
-                    if (isChecked)
+                    if(isChecked)
                       Row(
                         children: [
                           Text(
-                            "Please provide your odesk code.",
+                            "Please provide your ODS code.",
                             style: TextStyle(
                                 fontSize: 13.sp,
                                 color: Theme.of(context).primaryColor),
@@ -164,7 +164,7 @@ class _RegistrationState extends State<Registration> {
                       ),
                     if (isChecked) SizedBox(height: 20.h),
                     if (isChecked)
-                      customTextField(fcodeController, "Odesk Code", context,
+                      customTextField(fcodeController, "ODS Code", context,
                           Icons.password_outlined),
                   ],
                 ),
