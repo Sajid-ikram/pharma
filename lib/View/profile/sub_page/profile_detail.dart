@@ -23,6 +23,41 @@ class _ProfileDetailsState extends State<ProfileDetails> {
   TextEditingController numberController = TextEditingController();
   TextEditingController GPHSRegistrationNoController = TextEditingController();
   TextEditingController otherDescriptionController = TextEditingController();
+  List<String> bestDescribeList = [
+    'Locum',
+    'Pharmacy Owner',
+    'Pharmacy Manager',
+    'Relief Pharmacist',
+    'Second Pharmacist',
+  ];
+
+  @override
+  void initState() {
+    var pro = Provider.of<ProfileProvider>(context, listen: false);
+    print(pro.bestDescribe);
+    print("++++++++++++++++++++++++++ pro.isProfileComplete");
+    roleDropdownValue = pro.pharmacyRole ?? "Community";
+    otherRoleController.text = pro.roleOther ?? "";
+    numberController.text = pro.number ?? "";
+    isIndependentPrescriber = pro.isIndependentPrescriber ?? "No";
+    clinicalAreaDropdownValue =
+        pro.clinicalArea == null || pro.clinicalArea!.isEmpty
+            ? "Diabetes type 1"
+            : pro.clinicalArea ?? "";
+    GPHSRegistrationNoController.text = pro.GPHCNumber ?? "";
+    describeYouBest = pro.bestDescribe == null
+        ? "Locum"
+        : bestDescribeList.contains(pro.bestDescribe)
+            ? pro.bestDescribe!
+            : "Other";
+    otherDescriptionController.text = pro.bestDescribe == null
+        ? ""
+        : bestDescribeList.contains(pro.bestDescribe)
+            ? ""
+            : pro.bestDescribe!;
+    setState(() {});
+    super.initState();
+  }
 
   validate() async {
     try {
@@ -35,9 +70,14 @@ class _ProfileDetailsState extends State<ProfileDetails> {
             roleDropdownValue == "Others" ? otherRoleController.text : "",
         number: numberController.text,
         isIndependentPrescriber: isIndependentPrescriber,
-        clinicalArea: isIndependentPrescriber == "No" ? "" : clinicalAreaDropdownValue ,
-        GPHCNumber: isIndependentPrescriber == "No" ? "" : GPHSRegistrationNoController.text,
-        bestDescribe: describeYouBest == "Other" ? otherDescriptionController.text : describeYouBest,
+        clinicalArea:
+            isIndependentPrescriber == "No" ? "" : clinicalAreaDropdownValue,
+        GPHCNumber: isIndependentPrescriber == "No"
+            ? ""
+            : GPHSRegistrationNoController.text,
+        bestDescribe: describeYouBest == "Other"
+            ? otherDescriptionController.text
+            : describeYouBest,
         context: context,
       )
           .then(

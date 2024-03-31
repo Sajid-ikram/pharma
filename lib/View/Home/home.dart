@@ -1,6 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:provider/provider.dart';
 import 'package:webview_flutter/webview_flutter.dart';
+
+import '../../Provider/profile_provider.dart';
+import '../profile/sub_page/profile_detail.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -22,20 +28,66 @@ class _HomeState extends State<Home> {
         onPageFinished: (String url) {},
         onWebResourceError: (WebResourceError error) {},
         onNavigationRequest: (NavigationRequest request) {
-          if (request.url.startsWith('https://leicestershire-rutland.communitypharmacy.org.uk/')) {
+          if (request.url.startsWith(
+              'https://leicestershire-rutland.communitypharmacy.org.uk/')) {
             return NavigationDecision.navigate;
           }
           return NavigationDecision.navigate;
         },
       ),
     )
-    ..loadRequest(Uri.parse('https://leicestershire-rutland.communitypharmacy.org.uk/'));
+    ..loadRequest(
+        Uri.parse('https://leicestershire-rutland.communitypharmacy.org.uk/'));
 
   @override
   Widget build(BuildContext context) {
+    var pro = Provider.of<ProfileProvider>(context, listen: false);
+
     return SafeArea(
       child: Scaffold(
-        body: WebViewWidget(controller: controller),
+        body: Consumer<ProfileProvider>(
+          builder: (context, provider, child) {
+            return Column(
+              children: [
+                if (!pro.isProfileComplete)
+                  Container(
+                    height: 50.h,
+                    width: 360.w,
+                    color: Colors.yellow,
+                    child: Row(
+                      children: [
+                        SizedBox(width: 20.w),
+                        Text(
+                          "Please complete your profile",
+                          style: TextStyle(
+                            fontSize: 14.sp,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                        Spacer(),
+                        InkWell(
+                          onTap: () {
+                            Navigator.of(context).push(
+                                MaterialPageRoute(
+                                    builder: (context) => ProfileDetails()));
+                          },
+                          child: Text(
+                            "Start",
+                            style: TextStyle(
+                              fontSize: 14.sp,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                        SizedBox(width: 20.w),
+                      ],
+                    ),
+                  ),
+                Expanded(child: WebViewWidget(controller: controller)),
+              ],
+            );
+          },
+        ),
       ),
     );
   }

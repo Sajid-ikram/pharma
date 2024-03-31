@@ -17,7 +17,7 @@ class LodgedOut extends StatelessWidget {
         children: [
           SizedBox(
             height: 250.h,
-            child: Image.asset("assets/profile.jpg"),
+            child: ClipRRect(borderRadius: BorderRadius.circular(500) ,child: Image.asset("assets/profile.jpg")),
           ),
           SizedBox(height: 20.h),
           Text(

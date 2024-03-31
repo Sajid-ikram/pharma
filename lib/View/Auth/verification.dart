@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:pharma/Provider/profile_provider.dart';
 import 'package:pharma/View/Auth/widgets/flat_button.dart';
 import 'package:provider/provider.dart';
 import '../../Provider/authentication.dart';
@@ -179,6 +180,7 @@ class _VerificationState extends State<Verification> {
                     children: [
                       InkWell(
                         onTap: () {
+                          Provider.of<ProfileProvider>(context, listen: false).isProfileComplete = true;
                           Provider.of<Authentication>(context, listen: false)
                               .deleteUser();
                           Navigator.of(context)

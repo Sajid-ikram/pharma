@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../Utils/app_colors.dart';
-Widget profileList(String text, IconData iconData) {
 
+Widget profileList(String text, IconData iconData) {
   return Padding(
     padding: EdgeInsets.fromLTRB(25.w, 5.h, 25.w, 0),
     child: Column(
@@ -27,12 +27,11 @@ Widget profileList(String text, IconData iconData) {
             Text(
               text,
               style: TextStyle(
-                  color: const Color(0xff383840),
+                  color: text == "Complete your profile" ? Colors.red : Color(0xff383840),
                   fontSize: 15.sp,
                   fontWeight: FontWeight.w500),
             ),
             const Spacer(),
-
             Icon(
               Icons.arrow_forward_ios,
               size: 18.sp,

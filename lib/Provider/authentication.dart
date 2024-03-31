@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 
+import '../View/Auth/widgets/snackBar.dart';
+
 class Authentication with ChangeNotifier {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
 
@@ -28,7 +30,11 @@ class Authentication with ChangeNotifier {
       );
       return "Success";
     } on FirebaseAuthException catch (e) {
+      print(e);
+      print(e.code);
+      print("-------------------------------------------- e.code");
       switch (e.code) {
+
         case "invalid-email":
           return "Your email address appears to be malformed.";
         case "wrong-password":
@@ -39,6 +45,9 @@ class Authentication with ChangeNotifier {
 
         case "user-disabled":
           return "User with this email has been disabled.";
+
+        case "invalid-credential":
+          return "invalid credential";
 
         default:
           return "An undefined Error happened.";
@@ -60,9 +69,9 @@ class Authentication with ChangeNotifier {
           .createUserWithEmailAndPassword(
         email: email,
         password: password,
-      )
-          .then(
+      ).then(
         (value) async {
+          print("--------------------------+++++++++++++++++++++++555555555");
           Navigator.of(context, rootNavigator: true).pop();
           if (isRegistration)
             Navigator.of(context).pushReplacementNamed("MiddleOfHomeAndSignIn");
@@ -80,11 +89,27 @@ class Authentication with ChangeNotifier {
             },
           );
         },
-      );
+      ).catchError((error) {
+        Navigator.of(context, rootNavigator: true).pop();
+        switch (error.code) {
+          case "weak-password":
+            snackBar(context, "Your password is too weak");
+
+          case "invalid-email":
+            snackBar(context, "Your email is invalid");
+
+
+          case "email-already-in-use":
+            snackBar(context, "Email is already in use on different account");
+
+          default:
+            snackBar(context, "An undefined Error happened.");
+        }
+      });
 
       return "Success";
     } on FirebaseAuthException catch (e) {
-
+      print("--------------------------+++++++++++++++++++++++0");
       Navigator.of(context, rootNavigator: true).pop();
       switch (e.code) {
         case "weak-password":
@@ -100,6 +125,8 @@ class Authentication with ChangeNotifier {
           return "An undefined Error happened.";
       }
     } catch (e) {
+      Navigator.of(context, rootNavigator: true).pop();
+      print("--------------------------+++++++++++++++++++++++1 11 1");
       return "An Error occur";
     }
   }
@@ -193,6 +220,7 @@ class Authentication with ChangeNotifier {
 
   Future signOut() async {
     await _firebaseAuth.signOut();
+
     notifyListeners();
   }
 

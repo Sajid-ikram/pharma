@@ -51,6 +51,11 @@ class _SingleUserState extends State<SingleUser> {
     var pro = Provider.of<ProfileProvider>(context, listen: false);
     print( pro.currentUserUid);
     print( widget.ownerId);
+    try{
+      data["name"];
+    }catch(e){
+      return SizedBox();
+    }
     return isLoading
         ? Shimmer.fromColors(
             baseColor: Colors.grey,

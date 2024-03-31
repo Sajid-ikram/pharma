@@ -109,6 +109,7 @@ class ProfileProvider extends ChangeNotifier {
         'bestDescribe': bestDescribe,
       }, SetOptions(merge: true));
       isProfileComplete = true;
+      getUserInfo();
       notifyListeners();
     } catch (e) {
       return onError(context, "Having problem connecting to the server");

@@ -51,7 +51,7 @@ Widget topWidget(Size size, ProfileProvider pro, BuildContext context) {
     "Create Pharmacy",
     "My Pharmacy",
     "Admin Panel",
-    "Profile Detail",
+    pro.isProfileComplete? "Profile Detail" : "Complete your profile",
     "LogOut",
   ];
 
@@ -122,6 +122,9 @@ Widget topWidget(Size size, ProfileProvider pro, BuildContext context) {
                       } else if (index == 5) {
                         Provider.of<Authentication>(context, listen: false)
                             .signOut();
+                        pro.profileName = '';
+                        pro.role = '';
+
                         Navigator.of(context).push(
                             MaterialPageRoute(builder: (context) => SignIn()));
                       }

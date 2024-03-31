@@ -61,10 +61,14 @@ class _MiddleOfHomeAndSignInState extends State<MiddleOfHomeAndSignIn> {
     Provider.of<ProfileProvider>(context, listen: false)
         .getUserInfo()
         .then((value) {
-      if (!Provider.of<ProfileProvider>(context, listen: false)
+      /*if (!Provider.of<ProfileProvider>(context, listen: false)
           .isProfileComplete) {
-        _showMyDialog(context);
-      }
+        User? user = FirebaseAuth.instance.currentUser;
+        if (user != null && user.emailVerified) {
+          _showMyDialog(context);
+        }
+
+      }*/
     });
   }
 
@@ -87,7 +91,7 @@ class _MiddleOfHomeAndSignInState extends State<MiddleOfHomeAndSignIn> {
   }
 }
 
-Future<void> _showMyDialog(BuildContext context) async {
+/*Future<void> _showMyDialog(BuildContext context) async {
   return showDialog<void>(
     context: context,
     builder: (BuildContext context) {
@@ -113,4 +117,4 @@ Future<void> _showMyDialog(BuildContext context) async {
       );
     },
   );
-}
+}*/
